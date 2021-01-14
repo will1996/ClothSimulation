@@ -1,0 +1,30 @@
+// Dress on female character
+// Narain et al. 2012, Figure 10(a)
+//20s---468
+{
+"l0":1,
+"l1":1,
+    "frame_time": 0.04,
+    "frame_steps": 8,
+    "end_time": 20,
+    "cloths": [{
+        "mesh": "meshes/newfalling.obj",//sim2
+        "materials": [{"data": "materials/navy-sparkle-sweat.json", "bending_mult": 0.1, "stretching_mult": 0.5}],
+        "remeshing": {
+            "refine_angle": 0.3,
+            "refine_compression": 0.01,
+            "refine_velocity": 0.5,
+            "size": [10e-3, 100e-3],
+            "aspect_min": 0.2
+        }
+    }],
+    "obstacles": [{
+		"mesh": "fallingobs/0000_ob.obj",
+        "motion_type": 1,
+	"slow": 1,
+        "motion_obj_file":"fallingobs/%04d_ob.obj"
+	}],
+    "gravity": [0, 0, -9.8],
+"disable":["remeshing","popfilter"],
+    "magic": {"repulsion_thickness": 5e-3, "collision_stiffness": 1e6}
+}

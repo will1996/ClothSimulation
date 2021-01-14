@@ -1,0 +1,42 @@
+// Sheet of letter paper folded twice
+// Narain et al. 2013, Figure 5
+{
+    "frame_time": 0.04,
+    "frame_steps": 40,
+    "end_time": 14,
+    "cloths": [{
+        "mesh": "meshes/flag.obj",
+        "transform": {"translate": [0, 0, 1e-3]},
+        // "transform": {"translate": [0.5, 0, 0.5]},
+        "materials": [{
+            "data": "materials/camel-ponte-roma.json",
+            "thicken": 2,
+            "strain_limits": [0.95, 1.05]
+        }],
+        "remeshing": {
+            "refine_angle": 0.2,
+            "refine_compression": 0.1e-3,
+            "size": [3e-3, 100e-3],
+            "aspect_min": 0.2
+        }
+    }],
+    "motions": [[
+        {"time": 0, "transform": {"translate": [0, 0, 0]}},
+        {"time": 1, "transform": {"translate": [-1.5, -1, 1.7]},
+                    "velocity": {"translate": [-0.32, -0.42, 0]}
+        },
+        {"time": 2, "transform": {"translate": [-3, -2, 1e-3]}}
+    ]],
+    "obstacles": [{
+        "mesh": "meshes/square.obj",
+        "transform": {"translate": [-0.5,-0.5,0], "scale":10}
+    }],
+    "handles": [
+        {"nodes": [0], "end_time": 9, "fade_time": 1},
+        {"nodes": [2], "motion": 0, "end_time": 9, "fade_time": 1}
+    ],
+    "gravity": [0, 0, -9.8],
+    // "obs_friction": 0.2,
+    "disable": ["remeshing"],
+    "magic": {"collision_stiffness": 1e6, "handle_stiffness": 1e4}
+}
