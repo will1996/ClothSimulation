@@ -1,9 +1,6 @@
 CC := mpicc
 CXX := mpic++
-CUCXX = nvcc
 
-CUFLAGS = -Idependencies/cuda-samples-master/Common
-CUFLAGS_DEBUG :=  -g -arch sm_60 -rdc=true
 
 # # uncomment to disable OpenGL functionality
 NO_OPENGL := true
@@ -64,7 +61,6 @@ OBJ := \
 	vectors.o \
 	dosimulation.o
 
-CUOJB :=	simulation.o
 
 .PHONY: all debug release tags clean
 
@@ -77,26 +73,18 @@ debug: bin/arcsimd ctags
 release: bin/arcsim ctags
 
 bin/arcsimd: $(addprefix build/debug/,$(OBJ)) 
-	$(CXX) $^ -o $@ $(LDFLAGS) $(LDLIBS) -lcudart
+	$(CXX) $^ -o $@ $(LDFLAGS) $(LDLIBS) 
 
-bin/arcsim: $(addprefix build/release/,$(OBJ)) cuda_dlinked.o 
-	$(CXX) $^ -o $@ $(LDFLAGS) $(LDLIBS)  -lcudart -lcudadevrt
-
-cuda_dlinked.o:  build/release/cuda/simulation.o 
-	$(CUCXX) build/release/cuda/simulation.o  -o $@ -dlink  -lcudadevrt -lcudart -arch sm_60
+bin/arcsim: $(addprefix build/release/,$(OBJ)) 
+	$(CXX) $^ -o $@ $(LDFLAGS) $(LDLIBS)  
 
 build/debug/%.o: src/%.cpp 
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(CXXFLAGS_DEBUG) $< -o $@
-
-build/debug/cuda/%.o: src/cuda/%.cu
-	$(CUCXX) -c $(CUFLAGS) $(CUFLAGS_DEBUG) $< -o $@
 
 
 build/release/%.o: src/%.cpp
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(CXXFLAGS_RELEASE) $< -o $@
 
-build/release/cuda/simulation.o: src/cuda/simulation.cu
-	$(CUCXX) -c $(CUFLAGS) $(CUFLAGS_DEBUG) $< -o $@
 
 
 
