@@ -1,0 +1,30 @@
+// Dress on female character
+// Narain et al. 2012, Figure 10(a)
+//20s---248
+{
+    "l0":0,
+    "l1":2,
+    "frame_time": 0.04,
+    "frame_steps": 20,
+    "end_time": 40,
+    "cloths": [{
+        "mesh": "meshes/funnelcloth.obj",
+        "materials": [{"data": "materials/gray-interlock.json"}],
+        "remeshing": {
+            "refine_angle": 0.3,
+            "refine_compression": 0.01,
+            "refine_velocity": 0.5,
+            "size": [5e-3, 40e-3],
+            "aspect_min": 0.2
+        }
+    }],
+    "obstacles": [{
+		"mesh": "funnelobs/000.obj",
+        "motion_type": 1,
+	"slow":2,
+        "motion_obj_file":"funnelobs/%03d.obj"
+	}],
+    "disable":["remeshing"],
+    "gravity": [0, -9.8, 0],
+    "magic": {"repulsion_thickness": 5e-3, "collision_stiffness": 1e6}
+}

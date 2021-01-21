@@ -1,0 +1,21 @@
+// Dress on female character
+// Narain et al. 2012, Figure 10(a)
+{
+"l0":1,
+"l1":2,
+    "frame_time": 0.01,
+    "frame_steps": 2,
+    "end_time": 5,
+    "motions": {
+        "motfile": "meshes/dance-paused.mot",
+        "fps": 30,
+        "transform": {
+            "translate": [0, 0, -1],
+            "rotate": [-90, 0, 0, 1]
+        }
+    },
+"disable": ["remeshing"],
+    "obstacles": "meshes/female-objs/body%04d",
+    "gravity": [0, 0, -9.8],
+    "magic": {"repulsion_thickness": 5e-3, "collision_stiffness": 1e6}
+}
