@@ -261,51 +261,51 @@ template <int n> void parse 48,1771
 template <typename T> void parse 55,1983
 template <typename T> void parse 62,2138
 void load_json 79,2876
-void complain 148,5796
-void parse 153,5959
-void parse 157,6083
-void parse 161,6209
-void parse 165,6337
-struct Range 170,6467
-    double &min,Range::min171,6482
-    double &min, &max;Range::max171,6482
-    Range Range::Range172,6505
-void parse 175,6569
-struct Box 186,6839
-    Vec2 umin,Box::umin187,6852
-    Vec2 umin, umax;Box::umax187,6852
-    Box Box::Box188,6873
-    Box Box::Box189,6887
-void parse 192,6963
-struct Velocity 208,7355
-struct Velocity {Vec3 v,Velocity::v208,7355
-struct Velocity {Vec3 v, w;Velocity::w208,7355
-struct Velocity {Vec3 v, w; Vec3 o;Velocity::o208,7355
-void parse 212,7495
-void parse 230,8137
-void parse 239,8486
-void apply_velocity 245,8693
-void parse 252,8944
-void parse 278,10157
-void parse_motions 292,10724
-void parse 314,11522
-void parse 321,11779
-void parse_handles 340,12347
-void parse_handle 358,13150
-void parse_node_handle 384,14097
-void parse_circle_handle 418,15198
-void parse_glue_handle 436,15844
-void parse_obstacles 456,16506
-void parse_obstacle 484,17548
-void parse_morphs 506,18468
-void parse_morph 513,18711
-void parse 543,19826
-void parse 549,20019
-#define PARSE_MAGIC(550,20072
-#undef PARSE_MAGIC561,20544
-void load_material_data 569,20686
-void parse 585,21265
-void parse 595,21584
+void complain 151,5831
+void parse 156,5994
+void parse 160,6118
+void parse 164,6244
+void parse 168,6372
+struct Range 173,6502
+    double &min,Range::min174,6517
+    double &min, &max;Range::max174,6517
+    Range Range::Range175,6540
+void parse 178,6604
+struct Box 189,6874
+    Vec2 umin,Box::umin190,6887
+    Vec2 umin, umax;Box::umax190,6887
+    Box Box::Box191,6908
+    Box Box::Box192,6922
+void parse 195,6998
+struct Velocity 211,7390
+struct Velocity {Vec3 v,Velocity::v211,7390
+struct Velocity {Vec3 v, w;Velocity::w211,7390
+struct Velocity {Vec3 v, w; Vec3 o;Velocity::o211,7390
+void parse 215,7530
+void parse 233,8172
+void parse 242,8521
+void apply_velocity 248,8728
+void parse 255,8979
+void parse 281,10192
+void parse_motions 295,10759
+void parse 317,11557
+void parse 324,11814
+void parse_handles 343,12382
+void parse_handle 361,13185
+void parse_node_handle 387,14132
+void parse_circle_handle 421,15233
+void parse_glue_handle 439,15879
+void parse_obstacles 459,16541
+void parse_obstacle 487,17583
+void parse_morphs 509,18503
+void parse_morph 516,18746
+void parse 546,19861
+void parse 552,20054
+#define PARSE_MAGIC(553,20107
+#undef PARSE_MAGIC564,20579
+void load_material_data 572,20721
+void parse 588,21300
+void parse 598,21619
 
 conf.hpp,25
 #define CONF_HPP28,1315
@@ -497,9 +497,9 @@ int myrank, largeStep;27,551
 vector<Mesh> tmp_mesh;28,574
 void checkDx(41,1201
 void initialize(51,1524
-int determinePartition(129,4555
-void do_static_step(149,4946
-void do_simulation(186,6639
+int determinePartition(134,4606
+void do_static_step(154,4997
+void do_simulation(191,6690
 
 dosimulation.hpp,69
 #define DO_SIMULATION_HPP3,27

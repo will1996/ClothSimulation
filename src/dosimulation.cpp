@@ -86,11 +86,16 @@ void initialize(Simulation &sim, int start_step, int end_step, int cur_level, in
     {
         Json::Value json;
         Json::Reader reader;
-        string configFilename = stringf("%s/conf.json", outprefix.c_str());
+/*        
+	string configFilename = stringf("%s/conf.json", outprefix.c_str());
         ifstream file(configFilename.c_str());
-        bool parsingSuccessful = reader.parse(file, json);
+*/
+        ifstream file("out/conf.json");
+      bool parsingSuccessful = reader.parse(file, json);
         if(!parsingSuccessful) {
+/*
             fprintf(stderr, "Error reading file: %s\n", configFilename.c_str());
+*/
             fprintf(stderr, "%s", reader.getFormatedErrorMessages().c_str());
             abort();
         }

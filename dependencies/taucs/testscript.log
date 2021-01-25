@@ -1,0 +1,120 @@
+TAUCS TEST LOG
+lrvrwks09.umiacs.umd.edu
+Linux
+Sat Jan 23 19:51:05 EST 2021
+==============
+trying to maximize stack size:
+8192
+unlimited
+==============
+===============
+= test_cilk_snmf =
+last conf is linux
+= TEST FAILED test_cilk_snmf
+===============
+===============
+= test_complex =
+last conf is linux
+
+
+This build of TAUCS uses C99 complex-number support
+
++1       = 1.000000+0.000000i
+-1       = -1.000000+0.000000i
+0        = 0.000000+0.000000i
+i        = 0.000000+1.000000i
+1+i      = 1.000000+1.000000i
+real    addition performance approx inf Mflop/s
+complex addition performance approx inf Mflop/s
+
+
+= TEST PASSED test_complex
+===============
+===============
+= test_linsolve =
+last conf is linux
+= TEST FAILED test_linsolve
+===============
+===============
+= test_memory =
+last conf is linux
+Warning: /proc/meminfo reports 30.983952MB of memory while
+         sysconf       reports 31727.566406MB of memory
+Warning: /proc/meminfo reports 30.983952MB of memory while
+         sysconf       reports 31727.566406MB of memory
+taucs_avail_memory_size: [16384 24576 32768]
+taucs_avail_memory_size: [24576 28672 32768]
+taucs_avail_memory_size: [28672 30720 32768]
+taucs_avail_memory_size: [28672 29696 30720]
+taucs_avail_memory_size: [28672 29184 29696]
+taucs_avail_memory_size: [28672 28928 29184]
+taucs_avail_memory_size: [28928 29056 29184]
+taucs_avail_memory_size: malloc test=28928 MB sys test=31 MB
+system    memory = 31 MBtytes
+available memory = 23 MBtytes
+test succeeded
+= TEST PASSED test_memory
+===============
+===============
+= test_notimer =
+last conf is linux
+this may take a while
+ignore 1.0000e+00 1.0000e+00
+= TEST PASSED test_notimer
+===============
+===============
+= test_stack =
+last conf is linux
+taucs_maximize_stacksize: current stack size unlimited, max is unlimited
+test_stack: depth 1, starting
+test_stack: depth 1, done
+test_stack: depth 2, starting
+test_stack: depth 2, done
+test_stack: depth 4, starting
+test_stack: depth 4, done
+test_stack: depth 8, starting
+test_stack: depth 8, done
+test_stack: depth 16, starting
+test_stack: depth 16, done
+test_stack: depth 32, starting
+test_stack: depth 32, done
+test_stack: depth 64, starting
+test_stack: depth 64, done
+test_stack: depth 128, starting
+test_stack: depth 128, done
+test_stack: depth 256, starting
+test_stack: depth 256, done
+test_stack: depth 512, starting
+test_stack: depth 512, done
+test_stack: depth 1024, starting
+test_stack: depth 1024, done
+test_stack: depth 2048, starting
+test_stack: depth 2048, done
+test_stack: depth 4096, starting
+test_stack: depth 4096, done
+test_stack: depth 8192, starting
+test_stack: depth 8192, done
+test_stack: depth 16384, starting
+test_stack: depth 16384, done
+test_stack: depth 32768, starting
+test_stack: depth 32768, done
+test_stack: depth 65536, starting
+test_stack: depth 65536, done
+test_stack: depth 131072, starting
+test_stack: depth 131072, done
+test_stack: depth 262144, starting
+test_stack: depth 262144, done
+test_stack: depth 524288, starting
+test_stack: depth 524288, done
+test_stack: depth 1048576, starting
+test_stack: depth 1048576, done
+= TEST PASSED test_stack
+===============
+===============
+= test_timer =
+last conf is linux
+this may take a while
+ignore 1.0000e+00 1.0000e+00
+test succeeded, wtime=1.62e-01 seconds, ctime=1.62e-01 seconds
+= TEST PASSED test_timer
+===============

@@ -10,8 +10,8 @@ ifdef NO_OPENGL
 	CXXFLAGS := $(CXXFLAGS) -DNO_OPENGL
 endif
 CXXFLAGS_DEBUG := -Wall -g -Wno-sign-compare
-CXXFLAGS_RELEASE := -O3 -Wreturn-type -openmp -std=c++0x
-LDFLAGS := -L/usr/local/opt/openblas/lib -Ldependencies/lib -L/opt/local/lib -L/usr/local/lib -L/usr/lib -L/usr/local/lib/gcc/6 -L/usr/local/gfortran/lib -lpng -lz -ltaucs -llapack -lblas -lboost_filesystem-mt -lboost_thread-mt -ljson -lboost_system -lgomp -lalglib
+CXXFLAGS_RELEASE := -O3 -Wreturn-type -openmp -std=c++0x -g
+LDFLAGS := -L/usr/local/opt/openblas/lib -Ldependencies/lib -L/opt/local/lib -L/usr/local/lib -L/lib64 -L/usr/local/lib/gcc/6 -L/usr/local/gfortran/lib -lpng -lz -ltaucs -llapack -lblas -lboost_filesystem-mt -lboost_thread-mt -ljson -lboost_system -lgomp -lalglib
 	LDFLAGS := $(LDFLAGS) -lglut 
 
 

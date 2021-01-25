@@ -2,3 +2,8 @@
 *lib*
 build
 bin
+
+tmp/*
+
+!out/conf.json
+out/*

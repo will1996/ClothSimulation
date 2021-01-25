@@ -179,8 +179,8 @@ Obstacle	obstacle.hpp	/^    Obstacle (): start_time(0), end_time(infinity), acti
 Obstacle	obstacle.hpp	/^struct Obstacle {$/;"	s
 OptOptions	optimization.hpp	/^    OptOptions (): _max_iter(100), _eps_x(1e-6), _eps_f(1e-12), _eps_g(1e-6) {}$/;"	f	struct:OptOptions
 OptOptions	optimization.hpp	/^struct OptOptions {$/;"	s
-PARSE_MAGIC	conf.cpp	550;"	d	file:
-PARSE_MAGIC	conf.cpp	561;"	d	file:
+PARSE_MAGIC	conf.cpp	553;"	d	file:
+PARSE_MAGIC	conf.cpp	564;"	d	file:
 PHYSICS_HPP	physics.hpp	28;"	d
 PLASTICITY_HPP	plasticity.hpp	28;"	d
 POPFILTER_HPP	popfilter.hpp	28;"	d
@@ -890,7 +890,7 @@ max	util.cpp	/^double Stats::max () const {sort(); return xs.back();}$/;"	f	clas
 max	util.hpp	/^template <typename T> T max (const T &a, const T &b, const T &c) {$/;"	f
 max	util.hpp	/^template <typename T> T max (const T &a, const T &b, const T &c, const T &d) {$/;"	f
 max	winport.hpp	45;"	d
-max_iter	collision.cpp	/^static const int max_iter = 100;$/;"	v	file:
+max_iter	collision.cpp	/^static const int max_iter = 500;$/;"	v	file:
 max_iter	optimization.hpp	/^    OptOptions &max_iter (int n) {_max_iter = n; return *this;}$/;"	f	struct:OptOptions
 max_iter	optimization.hpp	/^    int max_iter () {return _max_iter;}$/;"	f	struct:OptOptions
 max_iter	separate.cpp	/^static const int max_iter = 100;$/;"	v	file:

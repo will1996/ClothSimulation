@@ -1,5 +1,3 @@
-// "Dart" style paper airplane crashing into a wall
-// Narain et al. 2013, Figure 6
 {
     "frame_time": 0.0004,
     "frame_steps": 40,

@@ -38,7 +38,7 @@
 #include <mpi.h>
 using namespace std;
 
-static const int max_iter = 100;
+static const int max_iter = 500;
 static const double &thickness = ::magic.projection_thickness;
 
 static double obs_mass;

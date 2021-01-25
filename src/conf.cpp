@@ -80,12 +80,15 @@ void load_json (const string &configFilename, Simulation &sim) {
     Json::Value json;
     Json::Reader reader;
     ifstream file(configFilename.c_str());
+    file >> json;
+/*
     bool parsingSuccessful = reader.parse(file, json);
     if(!parsingSuccessful) {
         fprintf(stderr, "Error reading file: %s\n", configFilename.c_str());
         fprintf(stderr, "%s", reader.getFormatedErrorMessages().c_str());
         abort();
     }
+*/
     file.close();
     // Gather general data
     if (!json["frame_time"].empty()) {
@@ -122,7 +125,7 @@ parse(sim.l1,json["l1"]);
         sim.enabled[i] = true;
         for (int j = 0; j < json["disable"].size(); j++)
         {
-            if (json["disable"][j] == module_names[i])
+            if (json["disable"][j].asString() == module_names[i])
                 sim.enabled[i] = false;
         }
     }
