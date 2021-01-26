@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="cuda">
+      <UniqueIdentifier>{e48d0a08-4530-4e82-b69f-f92369c492d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spatial-hashing">
+      <UniqueIdentifier>{d3bc7aa5-05e0-4622-ac10-62c3781ce50b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="simulation">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="tool">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="interface">
+      <UniqueIdentifier>{5d1a4980-07b0-482e-b944-db14e4874d58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="call-interface">
+      <UniqueIdentifier>{ed0ab275-a879-4429-bb14-52c077f1a9d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\conf.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\save.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\transformation.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dde.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\magic.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\obstacle.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mesh.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometry.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\handle.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\constraint.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vectors.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\timer.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mot_parser.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spline.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cloth.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="cuda\cudaCG.cpp">
+      <Filter>cuda</Filter>
+    </ClCompile>
+    <ClCompile Include="src\auglag.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\eigen.cpp">
+      <Filter>tool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gpu.cpp">
+      <Filter>simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\simulation.cpp">
+      <Filter>simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\collision.cpp">
+      <Filter>simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\CCSManager.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\initModel.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="src\init.cpp">
+      <Filter>simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="interface\main.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tmbvh.cpp">
+      <Filter>simulation</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\cloth.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\conf.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\constraint.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dde.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\handle.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesh.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\morph.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\obstacle.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\real.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\spline.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\transformation.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vectors.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\winport.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\magic.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mot_parser.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\save.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\timer.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\blockvectors.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\optimization.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\auglag.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="cuda\def.cuh">
+      <Filter>cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="spatial-hashing\CollisionPair.h">
+      <Filter>spatial-hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="spatial-hashing\CudaBasic.cuh">
+      <Filter>spatial-hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="spatial-hashing\SpatialHashCD.h">
+      <Filter>spatial-hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="spatial-hashing\SpatialHashHelper.cuh">
+      <Filter>spatial-hashing</Filter>
+    </ClInclude>
+    <ClInclude Include="cuda\tri3f.cuh">
+      <Filter>cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="cuda\pair.cuh">
+      <Filter>cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sparse.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\eigen.hpp">
+      <Filter>tool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\simulation.hpp">
+      <Filter>simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\collision.hpp">
+      <Filter>simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\CCSManager.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\forceline.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\real.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="interface\vec3f.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="cuda\dnf-filter.cuh">
+      <Filter>cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="cuda\bvh.cuh">
+      <Filter>cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tmbvh.hpp">
+      <Filter>simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\contour.h">
+      <Filter>simulation</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cuda\box.cuh">
+      <Filter>cuda</Filter>
+    </None>
+    <None Include="cuda\constraint.cuh">
+      <Filter>cuda</Filter>
+    </None>
+    <None Include="cuda\impact.cuh">
+      <Filter>cuda</Filter>
+    </None>
+    <None Include="cuda\mat3.cuh">
+      <Filter>cuda</Filter>
+    </None>
+    <None Include="cuda\mat9.cuh">
+      <Filter>cuda</Filter>
+    </None>
+    <None Include="cuda\matrix_builder.cuh">
+      <Filter>cuda</Filter>
+    </None>
+    <None Include="cuda\tools.cuh">
+      <Filter>cuda</Filter>
+    </None>
+    <None Include="cuda\vec3.cuh">
+      <Filter>cuda</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="spatial-hashing\SpatialHashHelper.cu">
+      <Filter>spatial-hashing</Filter>
+    </CudaCompile>
+    <CudaCompile Include="spatial-hashing\SH-combine.cu">
+      <Filter>spatial-hashing</Filter>
+    </CudaCompile>
+    <CudaCompile Include="cuda\cu-simulation.cu">
+      <Filter>cuda</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>

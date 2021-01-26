@@ -1,0 +1,434 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <CUDAPropsPath Condition="'$(CUDAPropsPath)'==''">$(VCTargetsPath)\BuildCustomizations</CUDAPropsPath>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug-interface|x64">
+      <Configuration>Debug-interface</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Reelase-NCC|x64">
+      <Configuration>Reelase-NCC</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-interface|x64">
+      <Configuration>Release-interface</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release-NC|x64">
+      <Configuration>Release-NC</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>gpuCloth</ProjectName>
+    <ProjectGuid>{C9C2E882-227B-4E00-AD6D-1AF346CA2237}</ProjectGuid>
+    <RootNamespace>clothViewer</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-interface|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Reelase-NCC|x64'">
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(CUDAPropsPath)\CUDA 10.2.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-interface|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-interface|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;./eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;OUTPUT_TXT;USE_TIMER;%(PreprocessorDefinitions);DLL_EXPORT</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <OpenMPSupport>false</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>cudart.lib;cutil64.lib;glew64.lib;glut64.lib;cublas.lib;cusparse.lib;cusolver.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./lib;$(BOOST157)\lib64-msvc-12.0;$(CUDA_PATH_V8_0)\lib\x64;./taucs/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <CudaCompile>
+      <CodeGeneration>compute_35,sm_35;</CodeGeneration>
+      <AdditionalOptions>-Xcompiler "/wd 4819" %(AdditionalOptions)</AdditionalOptions>
+      <Include>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;$(CUDA_PATH_V8_0)\include</Include>
+      <Defines>WIN32</Defines>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-interface|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;./eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;OUTPUT_TXT;USE_TIMER;%(PreprocessorDefinitions);DLL_EXPORT</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <OpenMPSupport>false</OpenMPSupport>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>glew32.lib;cudart.lib;cutil64.lib;glew64.lib;glut64.lib;cublas.lib;cusparse.lib;cusolver.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./lib;$(BOOST157)\lib64-msvc-12.0;$(CUDA_PATH_V8_0)\lib\x64;./taucs/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <CudaCompile>
+      <CodeGeneration>compute_35,sm_35;</CodeGeneration>
+      <AdditionalOptions>-Xcompiler "/wd 4819" %(AdditionalOptions)</AdditionalOptions>
+      <Include>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;$(CUDA_PATH_V8_0)\include</Include>
+      <Defines>WIN32</Defines>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;./eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);DLL_EXPORT</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <OpenMPSupport>false</OpenMPSupport>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>cudart.lib;cutil64.lib;glew64.lib;glut64.lib;cublas.lib;cusparse.lib;cusolver.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./lib;$(BOOST157)\lib64-msvc-12.0;$(CUDA_PATH_V8_0)\lib\x64;./taucs/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX64</TargetMachine>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <CudaCompile>
+      <CodeGeneration>compute_30,sm_30;compute_35,sm_35;compute_37,sm_37;compute_50,sm_50;compute_52,sm_52;compute_60,sm_60;compute_61,sm_61;%(CodeGeneration)</CodeGeneration>
+      <AdditionalOptions>-Xcompiler "/wd 4819" %(AdditionalOptions)</AdditionalOptions>
+      <Include>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;$(CUDA_V9_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.</Include>
+      <Defines>WIN32</Defines>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;./eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;USE_NC;%(PreprocessorDefinitions);DLL_EXPORT</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <OpenMPSupport>false</OpenMPSupport>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>cudart.lib;cutil64.lib;glew64.lib;glut64.lib;cublas.lib;cusparse.lib;cusolver.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./lib;$(BOOST157)\lib64-msvc-12.0;$(CUDA_PATH_V8_0)\lib\x64;./taucs/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX64</TargetMachine>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <CudaCompile>
+      <CodeGeneration>compute_30,sm_30;compute_35,sm_35;compute_37,sm_37;compute_50,sm_50;compute_52,sm_52;compute_60,sm_60;compute_61,sm_61;%(CodeGeneration)</CodeGeneration>
+      <AdditionalOptions>-Xcompiler "/wd 4819" %(AdditionalOptions)</AdditionalOptions>
+      <Include>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;$(CUDA_V9_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.</Include>
+      <Defines>WIN32</Defines>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;./eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);DLL_EXPORT</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <OpenMPSupport>false</OpenMPSupport>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>glew64.lib;cudart.lib;cutil64.lib;glut64.lib;cublas.lib;cusparse.lib;cusolver.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./lib;$(BOOST157)\lib64-msvc-12.0;$(CUDA_PATH_V8_0)\lib\x64;./taucs/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX64</TargetMachine>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <CudaCompile>
+      <CodeGeneration>compute_30,sm_30;compute_35,sm_35;compute_37,sm_37;compute_50,sm_50;compute_52,sm_52;compute_60,sm_60;compute_61,sm_61;%(CodeGeneration)</CodeGeneration>
+      <AdditionalOptions>-Xcompiler "/wd 4819" %(AdditionalOptions)</AdditionalOptions>
+      <Include>C:\ProgramData\NVIDIA Corporation\CUDA Samples\v10.2\common\inc;$(CUDA_V9_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.</Include>
+      <Defines>WIN32</Defines>
+      <TargetMachinePlatform>64</TargetMachinePlatform>
+    </CudaCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Reelase-NCC|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>;DLL_EXPORT</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="cuda\cudaCG.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-interface|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="interface\CCSManager.cpp" />
+    <ClCompile Include="interface\initModel.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="interface\main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\auglag.cpp" />
+    <ClCompile Include="src\cloth.cpp" />
+    <ClCompile Include="src\collision.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-interface|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\conf.cpp" />
+    <ClCompile Include="src\constraint.cpp" />
+    <ClCompile Include="src\dde.cpp" />
+    <ClCompile Include="src\eigen.cpp" />
+    <ClCompile Include="src\geometry.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\gpu.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;./eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-interface|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;./eigen;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="src\handle.cpp" />
+    <ClCompile Include="src\init.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-interface|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;.;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;..;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release-NC|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;..;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">$(CUDA_V8_0_SAMPLES_INC);$(CUDA_PATH_V8_0)\include;..;./inc;$(BOOST157);./jsoncpp/include;./png/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\io.cpp" />
+    <ClCompile Include="src\magic.cpp" />
+    <ClCompile Include="src\mesh.cpp" />
+    <ClCompile Include="src\mot_parser.cpp" />
+    <ClCompile Include="src\main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release-interface|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug-interface|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="src\obstacle.cpp" />
+    <ClCompile Include="src\save.cpp" />
+    <ClCompile Include="src\simulation.cpp" />
+    <ClCompile Include="src\spline.cpp" />
+    <ClCompile Include="src\timer.cpp" />
+    <ClCompile Include="src\tmbvh.cpp" />
+    <ClCompile Include="src\transformation.cpp" />
+    <ClCompile Include="src\util.cpp" />
+    <ClCompile Include="src\vectors.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cuda\bvh.cuh" />
+    <ClInclude Include="cuda\def.cuh" />
+    <ClInclude Include="cuda\dnf-filter.cuh" />
+    <ClInclude Include="cuda\pair.cuh" />
+    <ClInclude Include="cuda\tri3f.cuh" />
+    <ClInclude Include="interface\CCSManager.h" />
+    <ClInclude Include="interface\forceline.h" />
+    <ClInclude Include="interface\real.h" />
+    <ClInclude Include="interface\vec3f.h" />
+    <ClInclude Include="spatial-hashing\CollisionPair.h" />
+    <ClInclude Include="spatial-hashing\CudaBasic.cuh" />
+    <ClInclude Include="spatial-hashing\SpatialHashCD.h" />
+    <ClInclude Include="spatial-hashing\SpatialHashHelper.cuh" />
+    <ClInclude Include="src\auglag.hpp" />
+    <ClInclude Include="src\blockvectors.hpp" />
+    <ClInclude Include="src\cloth.hpp" />
+    <ClInclude Include="src\collision.hpp" />
+    <ClInclude Include="src\conf.hpp" />
+    <ClInclude Include="src\constraint.hpp" />
+    <ClInclude Include="src\contour.h" />
+    <ClInclude Include="src\dde.hpp" />
+    <ClInclude Include="src\eigen.hpp" />
+    <ClInclude Include="src\geometry.hpp" />
+    <ClInclude Include="src\handle.hpp" />
+    <ClInclude Include="src\io.hpp" />
+    <ClInclude Include="src\magic.hpp" />
+    <ClInclude Include="src\mesh.hpp" />
+    <ClInclude Include="src\morph.hpp" />
+    <ClInclude Include="src\mot_parser.hpp" />
+    <ClInclude Include="src\obstacle.hpp" />
+    <ClInclude Include="src\optimization.hpp" />
+    <ClInclude Include="src\real.hpp" />
+    <ClInclude Include="src\save.hpp" />
+    <ClInclude Include="src\simulation.hpp" />
+    <ClInclude Include="src\sparse.hpp" />
+    <ClInclude Include="src\spline.hpp" />
+    <ClInclude Include="src\timer.hpp" />
+    <ClInclude Include="src\tmbvh.hpp" />
+    <ClInclude Include="src\transformation.hpp" />
+    <ClInclude Include="src\util.hpp" />
+    <ClInclude Include="src\vectors.hpp" />
+    <ClInclude Include="src\winport.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="cuda\cu-simulation.cu" />
+    <CudaCompile Include="spatial-hashing\SH-combine.cu" />
+    <CudaCompile Include="spatial-hashing\SpatialHashHelper.cu" />
+    <None Include="cuda\box.cuh" />
+    <None Include="cuda\constraint.cuh" />
+    <None Include="cuda\impact.cuh" />
+    <None Include="cuda\mat3.cuh" />
+    <None Include="cuda\mat9.cuh" />
+    <None Include="cuda\matrix_builder.cuh" />
+    <None Include="cuda\tools.cuh" />
+    <None Include="cuda\vec3.cuh" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(CUDAPropsPath)\CUDA 10.2.targets" />
+  </ImportGroup>
+</Project>
