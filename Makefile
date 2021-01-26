@@ -1,9 +1,12 @@
 CC := mpicc
 CXX := mpic++
+NVCXX := nvcc
 
+CUFLAGS := -Idependencies/cuda-samples-master/Common
 
 # # uncomment to disable OpenGL functionality
 NO_OPENGL := true
+NVLIBS :=  -L$(CUDA_PATH)/lib64 -lcurand -lcublas -lcusparse -lcusolver -lcudart
 
 CXXFLAGS := -Idependencies/include -I/usr/local/include -Wno-deprecated-declarations
 ifdef NO_OPENGL
@@ -59,7 +62,10 @@ OBJ := \
 	trustregion.o \
 	util.o \
 	vectors.o \
-	dosimulation.o
+	dosimulation.o \
+	cu-simulation.o \
+	SH-combine.o\
+	cudaCG.o
 
 
 .PHONY: all debug release tags clean
@@ -76,7 +82,7 @@ bin/arcsimd: $(addprefix build/debug/,$(OBJ))
 	$(CXX) $^ -o $@ $(LDFLAGS) $(LDLIBS) 
 
 bin/arcsim: $(addprefix build/release/,$(OBJ)) 
-	$(CXX) $^ -o $@ $(LDFLAGS) $(LDLIBS)  
+	$(CXX) $^ -o $@ $(LDFLAGS) $(LDLIBS) $(NVLIBS)
 
 build/debug/%.o: src/%.cpp 
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(CXXFLAGS_DEBUG) $< -o $@
@@ -86,7 +92,17 @@ build/release/%.o: src/%.cpp
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(CXXFLAGS_RELEASE) $< -o $@
 
 
+build/release/cuda/vec3.o: src/cuda/vec3.cu
+	$(NVCXX) -c $(CUFLAGS) src/cuda/vec3.cu -o build/release/cuda/vec3.o 
 
+build/release/cu-simulation.o: src/cuda/cu-simulation.cu
+	$(NVCXX) -c $(CUFLAGS) src/cuda/cu-simulation.cu -o build/release/cu-simulation.o 
+
+build/release/SH-combine.o: src/cuda/spatial-hashing/SH-combine.cu
+	$(NVCXX) -c $(CUFLAGS) src/cuda/spatial-hashing/SH-combine.cu -o build/release/SH-combine.o 
+
+build/release/cudaCG.o: src/cuda/cudaCG.cpp
+	$(NVCXX) -c $(CUFLAGS) src/cuda/cudaCG.cpp -o build/release/cudaCG.o
 
 
 # Nicked from http://www.gnu.org/software/make/manual/make.html#Automatic-Prerequisites

@@ -37,24 +37,24 @@ namespace cg = cooperative_groups;
 // This can be max 32 and only power of 2 (i.e., 2/4/8/16/32).
 #define ROWS_PER_CTA 8
 
-#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 600
-#else
-__device__ double atomicAdd(double *address, double val) {
-  unsigned long long int *address_as_ull = (unsigned long long int *)address;
-  unsigned long long int old = *address_as_ull, assumed;
-
-  do {
-    assumed = old;
-    old = atomicCAS(address_as_ull, assumed,
-                    __double_as_longlong(val + __longlong_as_double(assumed)));
-
-    // Note: uses integer comparison to avoid hang in case of NaN (since NaN !=
-    // NaN)
-  } while (assumed != old);
-
-  return __longlong_as_double(old);
-}
-#endif
+//#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 600
+//#else
+//__device__ double atomicAdd(double *address, double val) {
+//  unsigned long long int *address_as_ull = (unsigned long long int *)address;
+//  unsigned long long int old = *address_as_ull, assumed;
+//
+//  do {
+//    assumed = old;
+//    old = atomicCAS(address_as_ull, assumed,
+//                    __double_as_longlong(val + __longlong_as_double(assumed)));
+//
+//    // Note: uses integer comparison to avoid hang in case of NaN (since NaN !=
+//    // NaN)
+//  } while (assumed != old);
+//
+//  return __longlong_as_double(old);
+//}
+//#endif
 
 static __global__ void JacobiMethod(const float *A, const double *b,
                                     const float conv_threshold, double *x,

@@ -1,177 +1,164 @@
 typedef struct {
-	double3x3 m[3];
-} double3x9;
+	REAL c[27];
 
-inline __host__ __device__ double3 getCol(const double3x9 &a, int i) {
-	int k = i/3;
-	return getCol(a.m[k], i-k*3);
+	inline __host__ __device__ REAL3 m(int i) const { return make_REAL3(c[i*3], c[i*3+1], c[i*3+2]); }
+} REAL3x9;
+
+inline __host__ __device__ REAL3 getCol(const REAL3x9 &a, int i) {
+	return make_REAL3(a.c[i*3], a.c[i*3+1], a.c[i*3+2]);
 }
 
-inline __host__ __device__ double3x9 getTrans (const double3x9 &m) {
-	double3x9 t;
-	t.m[0] = getTrans(m.m[0]);
-	t.m[1] = getTrans(m.m[1]);
-	t.m[2] = getTrans(m.m[2]);
+inline __host__ __device__ REAL3x9 getTrans (const REAL3x9 &m) {
+	REAL3x9 t;
+
+	getTrans(t.c, m.c);
+	getTrans(t.c+9, m.c+9);
+	getTrans(t.c+18, m.c+18);
 	return t;
 }
 
-inline __host__ __device__ double3x3 operator *(const double3x9 &a, const double3 &b) {
-	double3x3 t;
+inline __host__ __device__ REAL3x3 operator *(const REAL3x9 &a, const REAL3 &b) {
+	REAL3x3 t;
 
-	t.column0 = make_double3(dot(a.m[0].column0, b), dot(a.m[0].column1, b), dot(a.m[0].column2, b));
-	t.column1 = make_double3(dot(a.m[1].column0, b), dot(a.m[1].column1, b), dot(a.m[1].column2, b));
-	t.column2 = make_double3(dot(a.m[2].column0, b), dot(a.m[2].column1, b), dot(a.m[2].column2, b));
+	for (int i = 0; i < 9; i++)
+		t.c[i] = dot(a.m(i), b);
 	return t;
 }
 
 typedef struct {
-	double3x3 m[3][3];
-} double9x9;
+	REAL c[81];
 
-inline __host__ __device__ double &getIJ(double9x9 &a, int i, int j)
+	inline __host__ __device__ REAL &getIJ(int i, int j) { return c[j * 9 + i]; }
+	inline __host__ __device__ REAL getIJ(int i, int j) const { return c[j * 9 + i]; }
+} REAL9x9;
+
+inline __host__ __device__ REAL9x9 operator- (const REAL9x9 &a)
 {
-	int k = i/3;
-	int l = j/3;
+	REAL9x9 t;
 
-	return getIJ(a.m[k][l], i-k*3, j-l*3);
-}
-
-inline __host__ __device__ double9x9 make_double9x9 (const double3x3 v[])
-{
-	double9x9 t;
-
-	for (int i=0; i<3; i++)
-		for (int j=0; j<3; j++)
-			t.m[i][j] = v[i*3+j];
+	for (int i=0; i<81; i++)
+			t.c[i] = -a.c[i];
 
 	return t;
 }
 
-inline __host__ __device__ double9x9 operator- (const double9x9 &a)
+inline __host__ __device__ REAL9x9 operator+ (const REAL9x9 &a, const REAL9x9 &b)
 {
-	double9x9 t;
+	REAL9x9 t;
 
-	for (int i=0; i<3; i++)
-		for (int j=0; j<3; j++)
-			t.m[i][j] = -a.m[i][j];
+	for (int i = 0; i<81; i++)
+		t.c[i] = a.c[i]+b.c[i];
 
 	return t;
 }
 
-inline __host__ __device__ double9x9 operator+ (const double9x9 &a, const double9x9 &b)
+inline __host__ __device__ void operator+= (REAL9x9 &a, const REAL9x9 &b)
 {
-	double9x9 t;
+	for (int i = 0; i<81; i++)
+		a.c[i] += b.c[i];
+}
 
-	for (int i=0; i<3; i++)
-		for (int j=0; j<3; j++)
-			t.m[i][j] = a.m[i][j]+b.m[i][j];
+inline __host__ __device__ REAL9x9 operator* (REAL a, const REAL9x9 &b)
+{
+	REAL9x9 t;
+
+	for (int i = 0; i<81; i++)
+		t.c[i] = a*b.c[i];
 	
 	return t;
 }
 
-inline __host__ __device__ void operator+= (double9x9 &a, const double9x9 &b)
-{
-	for (int i=0; i<3; i++)
-		for (int j=0; j<3; j++)
-			a.m[i][j] += b.m[i][j];
-}
+inline __host__ __device__ REAL9x9 operator *(const REAL9x9 &b, REAL a) {
+	REAL9x9 t;
 
-inline __host__ __device__ double9x9 operator* (double a, const double9x9 &b)
-{
-	double9x9 t;
+	for (int i = 0; i<81; i++)
+		t.c[i] = a*b.c[i];
 
-	for (int i=0; i<3; i++)
-		for (int j=0; j<3; j++)
-			t.m[i][j] = a*b.m[i][j];
-	
 	return t;
 }
 
-inline __host__ __device__ double9x9 operator *(const double9x9 &b, double a) {
-	double9x9 t;
-
-	for (int i=0; i<3; i++)
-		for (int j=0; j<3; j++)
-			t.m[i][j] = a*b.m[i][j];
-	
-	return t;
-}
-
-inline __host__ __device__ double9x9 operator *(const double3x9 &a, const double3x9 &b)
+inline __host__ __device__ REAL9x9 operator *(const REAL3x9 &a, const REAL3x9 &b)
 {
-	double9x9 t;
+	REAL9x9 t;
 
 	for (int i=0; i<9; i++)
 		for (int j=0; j<9; j++) {
-			getIJ(t, i, j) = dot(getCol(a, i), getCol(b, j));
+			t.getIJ(i, j) = dot(getCol(a, i), getCol(b, j));
 		}
 	return t;
 }
 
 typedef struct {
-	double3x3 m[4][4];
-} double12x12;
+	REAL c[144];
+
+	inline __host__ __device__ REAL &getIJ(int i, int j) { return c[j * 12 + i]; }
+	inline __host__ __device__ REAL getIJ(int i, int j) const { return c[j * 12 + i]; }
+} REAL12x12;
 
 typedef struct {
-	double3 m[4];
-} double3x4;
+	REAL c[12];
+	inline __host__ __device__ REAL3 c0() const { return make_REAL3(c[0], c[1], c[2]); }
+	inline __host__ __device__ REAL3 c1() const { return make_REAL3(c[3], c[4], c[5]); }
+	inline __host__ __device__ REAL3 c2() const { return make_REAL3(c[6], c[7], c[8]); }
+	inline __host__ __device__ REAL3 c3() const { return make_REAL3(c[9], c[10], c[11]); }
+	inline __host__ __device__ REAL3 m(int i) const { return make_REAL3(c[i * 3], c[i * 3 + 1], c[i * 3 + 2]); }
+} REAL3x4;
 
-typedef double3x3 double9;
-typedef double3x4 double12;
+typedef REAL3x3 REAL9;
+typedef REAL3x4 REAL12;
 
-inline __host__ __device__ double9 operator *(const double9x9 &a, const double9 &b)
+inline __host__ __device__ REAL9 operator *(const REAL9x9 &a, const REAL9 &b)
 {
-	double9 t;
+	REAL9 t;
 
-	t.column0 = a.m[0][0]*b.column0+a.m[0][1]*b.column1+a.m[0][2]*b.column2;
-	t.column1 = a.m[1][0]*b.column0+a.m[1][1]*b.column1+a.m[1][2]*b.column2;
-	t.column2 = a.m[2][0]*b.column0+a.m[2][1]*b.column1+a.m[2][2]*b.column2;
+	for (int i = 0; i < 9; i++) {
+		t.c[i] = 0;
+
+		for (int j = 0; j < 9; j++)
+			t.c[i] += a.getIJ(i, j) * b.c[j];
+	}
+
 	return t;
 }
 
-inline __host__ __device__ double9x9 outer(const double9 &u, const double9 &v)
+inline __host__ __device__ REAL9x9 outer(const REAL9 &u, const REAL9 &v)
 {
-	double9x9 t;
+	REAL9x9 t;
 
 	for (int j=0; j<9; j++)
 		for (int i=0; i<9; i++) 
-			getIJ(t, i, j) = getI(u, i)*getI(v, j);
+			t.getIJ(i, j) = getI(u, i)*getI(v, j);
 
 	return t;
 }
 
 
-inline __host__ __device__ double3x4 make_double3x4
-	(const double3 &a, const double3 &b, const double3 &c, const double3 &d)
+inline __host__ __device__ REAL3x4 make_REAL3x4
+	(const REAL3 &a, const REAL3 &b, const REAL3 &c, const REAL3 &d)
 {
-	double3x4 t;
+	REAL3x4 t;
 
-	t.m[0] = a;
-	t.m[1] = b;
-	t.m[2] = c;
-	t.m[3] = d;
+	t.c[0] = a.x; t.c[1] = a.y; t.c[2] = a.z;
+	t.c[3] = b.x; t.c[4] = b.y; t.c[5] = b.z;
+	t.c[6] = c.x; t.c[7] = c.y; t.c[8] = c.z;
+	t.c[9] = d.x; t.c[10] = d.y; t.c[11] = d.z;
 
 	return t;
 }
 
-inline __host__ __device__ double &getIJ(double12x12 &a, int i, int j)
+inline __host__ __device__ REAL &getIJ(REAL12x12 &a, int i, int j)
 {
-	int k = i/3;
-	int l = j/3;
-
-	return getIJ(a.m[k][l], i-k*3, j-l*3);
+	return a.c[j * 12 + i];
 }
 
-inline __host__ __device__ double getI(const double12 &a, int i)
+inline __host__ __device__ REAL getI(const REAL12 &a, int i)
 {
-	int id = i/3;
-
-	return getI(a.m[id], i-id*3);
+	return a.c[i];
 }
 
-inline __host__ __device__ double12x12 outer(const double12 &u, const double12 &v)
+inline __host__ __device__ REAL12x12 outer(const REAL12 &u, const REAL12 &v)
 {
-	double12x12 t;
+	REAL12x12 t;
 
 	for (int j=0; j<12; j++)
 		for (int i=0; i<12; i++) 
@@ -180,74 +167,72 @@ inline __host__ __device__ double12x12 outer(const double12 &u, const double12 &
 	return t;
 }
 
-inline __host__ __device__ double12x12 operator* (double a, const double12x12 &b) {
-	double12x12 t;
+inline __host__ __device__ REAL12x12 operator* (REAL a, const REAL12x12 &b) {
+	REAL12x12 t;
 
-	for (int i=0; i<4; i++)
-		for (int j=0; j<4; j++)
-			t.m[i][j] = a*b.m[i][j];
+	for (int i = 0; i < 144; i++)
+		t.c[i] = a*b.c[i];
+
+	return t;
+}
+
+inline __host__ __device__ REAL12x12 operator *(const REAL12x12 &b, REAL a) {
+	REAL12x12 t;
+
+	for (int i = 0; i < 144; i++)
+		t.c[i] = a*b.c[i];
+
+	return t;
+}
+
+inline __host__ __device__ REAL12 operator* (REAL a, const REAL12 &b) {
+	REAL12 t;
+
+	for (int i=0; i<12; i++)
+		t.c[i] = a*b.c[i];
 	
 	return t;
 }
 
-inline __host__ __device__ double12x12 operator *(const double12x12 &b, double a) {
-	double12x12 t;
+inline __host__ __device__ REAL12 operator *(const REAL12 &b, REAL a) {
+	REAL12 t;
 
-	for (int i=0; i<4; i++)
-		for (int j=0; j<4; j++)
-			t.m[i][j] = a*b.m[i][j];
+	for (int i=0; i<12; i++)
+		t.c[i] = a*b.c[i];
 	
 	return t;
 }
 
-inline __host__ __device__ double12 operator* (double a, const double12 &b) {
-	double12 t;
-
-	for (int i=0; i<4; i++)
-		t.m[i] = a*b.m[i];
-	
-	return t;
-}
-
-inline __host__ __device__ double12 operator *(const double12 &b, double a) {
-	double12 t;
-
-	for (int i=0; i<4; i++)
-		t.m[i] = a*b.m[i];
-	
-	return t;
-}
-
-inline __host__ __device__ double12x12 operator- (const double12x12 &a)
+inline __host__ __device__ REAL12x12 operator- (const REAL12x12 &a)
 {
-	double12x12 t;
+	REAL12x12 t;
 
-	for (int i=0; i<4; i++)
-		for (int j=0; j<4; j++)
-			t.m[i][j] = -a.m[i][j];
+	for (int i=0; i<144; i++)
+		t.c[i] = -a.c[i];
 
 	return t;
 }
 
 
-inline __host__ __device__ double12 operator *(const double12x12 &a, const double12 &b)
+inline __host__ __device__ REAL12 operator *(const REAL12x12 &a, const REAL12 &b)
 {
-	double12 t;
+	REAL12 t;
 
-	t.m[0] = a.m[0][0]*b.m[0]+a.m[0][1]*b.m[1]+a.m[0][2]*b.m[2]+a.m[0][3]*b.m[3];
-	t.m[1] = a.m[1][0]*b.m[0]+a.m[1][1]*b.m[1]+a.m[1][2]*b.m[2]+a.m[1][3]*b.m[3];
-	t.m[2] = a.m[2][0]*b.m[0]+a.m[2][1]*b.m[1]+a.m[2][2]*b.m[2]+a.m[2][3]*b.m[3];
-	t.m[3] = a.m[3][0]*b.m[0]+a.m[3][1]*b.m[1]+a.m[3][2]*b.m[2]+a.m[3][3]*b.m[3];
+	for (int i = 0; i < 12; i++) {
+		t.c[i] = 0;
+		for (int j = 0; j < 12; j++)
+			t.c[i] += a.getIJ(i, j)*getI(b, j);
+	}
+	
 	return t;
 }
 
-inline __host__ __device__ double12 operator +(const double12 &a, const double12 &b)
+inline __host__ __device__ REAL12 operator +(const REAL12 &a, const REAL12 &b)
 {
-	double12 t;
+	REAL12 t;
 
-	for (int i=0; i<4; i++)
-		t.m[i] = a.m[i]+b.m[i];
+	for (int i = 0; i < 12; i++)
+		t.c[i] = a.c[i] + b.c[i];
 
 	return t;
 }
-

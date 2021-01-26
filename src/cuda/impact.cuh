@@ -7,11 +7,11 @@ typedef enum {
 struct g_impNode {
 	uint _n;
 	bool _f;
-	double3 _ox;
-	double3 _x;
-	double _m;
+	REAL3 _ox;
+	REAL3 _x;
+	REAL _m;
 
-	__host__ __device__ g_impNode(uint n, bool f, const double3 &ox, const double3 &x, double m) {
+	__host__ __device__ g_impNode(uint n, bool f, const REAL3 &ox, const REAL3 &x, REAL m) {
 		_n = n;
 		_f = f;
 		_ox = ox;
@@ -23,11 +23,11 @@ struct g_impNode {
 struct g_impact {
 	uint _nodes[4];
 	bool _frees[4];
-	double _w[4];
+	REAL _w[4];
 
     ImpactType _type;
-    double _t;
-	double3 _n;
+    REAL _t;
+	REAL3 _n;
 
 	__host__ __device__ g_impact()
 	{
@@ -125,7 +125,7 @@ inline __device__ void addImpact(g_impact *imps, uint *idx, g_impact &imp)
 }
 
 inline __device__ void addNodeInfo(g_impNode *nodes, uint *idx, 
-								   uint id, bool free, const double3 &ox, const double3 &x, double m)
+								   uint id, bool free, const REAL3 &ox, const REAL3 &x, REAL m)
 {
 	if (*idx < MAX_IMP_NODE_NUM) 
 	{
