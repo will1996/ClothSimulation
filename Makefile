@@ -96,7 +96,7 @@ build/release/%.o: src/%.cpp
 
 
 build/release/gpusimulation.o: src/cuda/gpusimulation.cu
-	$(NVCXX) -c $(NVFLAGS) src/cuda/gpusimulation.cu -o build/release/gpusimulation.o
+	$(NVCXX) -c $(NVFLAGS) $(NVLIBS) $(NVFLAGS_DEBUG)  src/cuda/gpusimulation.cu -o build/release/gpusimulation.o
 
 
 # Nicked from http://www.gnu.org/software/make/manual/make.html#Automatic-Prerequisites
