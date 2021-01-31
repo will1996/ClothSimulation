@@ -14,7 +14,7 @@ NVFLAGS_RELEASE  := -m64 -gencode arch=compute_75,code=compute_75 -gencode arch=
 NVFLAGS_DEBUG  := -g -G -m64 -gencode arch=compute_75,code=compute_75 -gencode arch=compute_61,code=compute_61 -gencode arch=compute_35,code=compute_35
 
 CC := gcc
-CXX := g++
+CXX := mpic++
 AR := ar
 
 # # uncomment to disable OpenGL functionality
