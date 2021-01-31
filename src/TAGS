@@ -691,9 +691,9 @@ struct Magic 32,1369
     Magic Magic::Magic40,1630
 
 main.cpp,87
-int main 40,1616
-    struct Action 43,1700
-        string name;Action::name44,1720
+int main 40,1608
+    struct Action 43,1692
+        string name;Action::name44,1712
 
 mesh.cpp,1550
 template <typename T1,34,1423
@@ -1124,10 +1124,10 @@ double dihedral_angle 206,8209
 Quadratic<4> bending 212,8399
 template <int n> Quadratic<1> restrict 235,9526
 bool set_midpoint_position 246,9801
-int combine_label 300,11786
-RemeshOp split_edge 302,11850
-RemeshOp collapse_edge 347,13773
-RemeshOp flip_edge 378,15072
+int combine_label 300,11792
+RemeshOp split_edge 302,11856
+RemeshOp collapse_edge 347,13779
+RemeshOp flip_edge 378,15078
 
 remesh.hpp,688
 #define REMESH_HPP28,1317

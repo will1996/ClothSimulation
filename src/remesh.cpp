@@ -289,7 +289,7 @@ bool set_midpoint_position (const Edge *edge, Vert *vnew[2], Node *node) {
     //     REPORT(-q.A.inv()*q.b);
     // }
     Vec3 tmp = q.A.inv()*q.b;
-    if (isnan(tmp[0])||isnan(tmp[1])||isnan(tmp[2]))
+    if (::isnan(tmp[0])||::isnan(tmp[1])||::isnan(tmp[2]))
         return false;
     pos<s>(node) -= tmp;
     return true;

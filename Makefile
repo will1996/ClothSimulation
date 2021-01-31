@@ -2,18 +2,23 @@ CC := mpicc
 CXX := mpic++
 NVCXX := nvcc
 
-CUFLAGS := -Idependencies/cuda-samples-master/Common
+NVFLAGS := -Idependencies/cuda-samples-master/Common -std=c++11 --expt-relaxed-constexpr
 
 # # uncomment to disable OpenGL functionality
 NO_OPENGL := true
 NVLIBS :=  -L$(CUDA_PATH)/lib64 -lcurand -lcublas -lcusparse -lcusolver -lcudart
 
-CXXFLAGS := -Idependencies/include -I/usr/local/include -Wno-deprecated-declarations
+NVFLAGS_DEBUG  := -g -G -m64 -gencode arch=compute_75,code=compute_75 -gencode arch=compute_61,code=compute_61 -gencode arch=compute_35,code=compute_35
+
+NVFLAGS_RELEASE  := -m64 -gencode arch=compute_75,code=compute_75 -gencode arch=compute_61,code=compute_61 -gencode arch=compute_35,code=compute_35
+
+CXXFLAGS := -Idependencies/include -I/usr/local/include -Wno-deprecated-declarations -std=c++11
 ifdef NO_OPENGL
 	CXXFLAGS := $(CXXFLAGS) -DNO_OPENGL
 endif
+
 CXXFLAGS_DEBUG := -Wall -g -Wno-sign-compare
-CXXFLAGS_RELEASE := -O3 -Wreturn-type -openmp -std=c++0x -g
+CXXFLAGS_RELEASE := -O3 -Wreturn-type -openmp  -g
 LDFLAGS := -L/usr/local/opt/openblas/lib -Ldependencies/lib -L/opt/local/lib -L/usr/local/lib -L/lib64 -L/usr/local/lib/gcc/6 -L/usr/local/gfortran/lib -lpng -lz -ltaucs -llapack -lblas -lboost_filesystem-mt -lboost_thread-mt -ljson -lboost_system -lgomp -lalglib
 	LDFLAGS := $(LDFLAGS) -lglut 
 
@@ -63,9 +68,7 @@ OBJ := \
 	util.o \
 	vectors.o \
 	dosimulation.o \
-	cu-simulation.o \
-	SH-combine.o\
-	cudaCG.o
+	gpusimulation.o 
 
 
 .PHONY: all debug release tags clean
@@ -92,17 +95,8 @@ build/release/%.o: src/%.cpp
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(CXXFLAGS_RELEASE) $< -o $@
 
 
-build/release/cuda/vec3.o: src/cuda/vec3.cu
-	$(NVCXX) -c $(CUFLAGS) src/cuda/vec3.cu -o build/release/cuda/vec3.o 
-
-build/release/cu-simulation.o: src/cuda/cu-simulation.cu
-	$(NVCXX) -c $(CUFLAGS) src/cuda/cu-simulation.cu -o build/release/cu-simulation.o 
-
-build/release/SH-combine.o: src/cuda/spatial-hashing/SH-combine.cu
-	$(NVCXX) -c $(CUFLAGS) src/cuda/spatial-hashing/SH-combine.cu -o build/release/SH-combine.o 
-
-build/release/cudaCG.o: src/cuda/cudaCG.cpp
-	$(NVCXX) -c $(CUFLAGS) src/cuda/cudaCG.cpp -o build/release/cudaCG.o
+build/release/gpusimulation.o: src/cuda/gpusimulation.cu
+	$(NVCXX) -c $(NVFLAGS) src/cuda/gpusimulation.cu -o build/release/gpusimulation.o
 
 
 # Nicked from http://www.gnu.org/software/make/manual/make.html#Automatic-Prerequisites
