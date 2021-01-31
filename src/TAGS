@@ -1,0 +1,1363 @@
+
+auglag.cpp,295
+static const NLConOpt *problem;problem9,151
+static vector<double> lambda;10,184
+static double mu;11,215
+void augmented_lagrangian_method 18,446
+static void add 51,1643
+inline double clamp_violation 56,1774
+static void auglag_value_and_grad 59,1896
+static void multiplier_update 90,3091
+
+auglag.hpp,264
+#define AUGLAG_HPP3,22
+struct NLOpt 8,93
+    int nvar,NLOpt::nvar10,197
+    int nvar, ncon;NLOpt::ncon10,197
+    virtual void precompute NLOpt::precompute12,270
+inline Vec3 get_subvec 25,901
+inline void set_subvec 27,1001
+inline void add_subvec 29,1114
+
+blockvectors.hpp,489
+template <int m,5,42
+template <int m, int n,5,42
+Vec<m*n, T> mat_to_vec(6,79
+template <int m,14,249
+template <int m, int n,14,249
+Mat<m, n, T> vec_to_mat(15,286
+template <int bn,23,457
+template <int bn, int m,23,457
+template <int bn, int m, int n,23,457
+template <int bn, int m, int n, typename T> Mat<m*bn, n*bn, T> blockdiag(23,457
+template <int m,32,731
+template <int m, int n> Mat<m*n, m*n, REAL> transpose(32,731
+template <> inline Mat<3, 4> symmetrize<symmetrize42,986
+
+cloth.hpp,1130
+struct Cloth 7,80
+	Mesh mesh;Cloth::mesh8,96
+	struct Material Cloth::Material9,109
+		REAL density;Cloth::Material::density10,129
+		StretchingSamples stretching;Cloth::Material::stretching11,162
+		BendingData bending;Cloth::Material::bending12,195
+		REAL damping;Cloth::Material::damping13,219
+		REAL strain_min,Cloth::Material::strain_min14,282
+		REAL strain_min, strain_max;Cloth::Material::strain_max14,282
+		REAL yield_curv,Cloth::Material::yield_curv15,331
+		REAL yield_curv, weakening;Cloth::Material::weakening15,331
+	std::vector<Material *> materials;Cloth::materials17,392
+	struct Remeshing Cloth::Remeshing18,429
+		REAL refine_angle,Cloth::Remeshing::refine_angle19,450
+		REAL refine_angle, refine_compression,Cloth::Remeshing::refine_compression19,450
+		REAL refine_angle, refine_compression, refine_velocity;Cloth::Remeshing::refine_velocity19,450
+		REAL size_min,Cloth::Remeshing::size_min20,509
+		REAL size_min, size_max;Cloth::Remeshing::size_max20,509
+		REAL aspect_min;Cloth::Remeshing::aspect_min21,552
+	} remeshing;Cloth::remeshing22,596
+inline void compute_masses(25,617
+
+collision.cpp,3032
+static const int max_iter 15,261
+static const REAL &thickness thickness16,295
+static REAL obs_mass;18,359
+static bool deform_obstacles;19,382
+static vector<Vec3> xold;21,415
+static vector<Vec3> xold_obs;22,442
+const vector<Mesh*> *meshes,meshes27,573
+const vector<Mesh*> *meshes, *obs_meshes;obs_meshes27,573
+int find_mesh(31,646
+pair<bool, int> find_in_meshes(47,1244
+template <typename Primitive> bool is_free(55,1451
+REAL get_mass(60,1564
+	I_NULL ::I_NULL63,1662
+	I_VF ::I_VF64,1677
+	I_EE ::I_EE65,1689
+} ImpactType;66,1700
+struct tmImpactInfo 69,1719
+	uint _nodes[tmImpactInfo::_nodes70,1742
+	bool _frees[tmImpactInfo::_frees71,1760
+	REAL _w[tmImpactInfo::_w72,1778
+	ImpactType _type;tmImpactInfo::_type74,1794
+	REAL _t;tmImpactInfo::_t75,1814
+	Vec3 _n;tmImpactInfo::_n76,1825
+	void print(tmImpactInfo::print78,1838
+struct g_impactNode 89,2128
+	uint _n;g_impactNode::_n90,2151
+	bool _f;g_impactNode::_f91,2162
+	Vec3 _ox;g_impactNode::_ox92,2173
+	Vec3 _x;g_impactNode::_x93,2185
+	REAL _m;g_impactNode::_m94,2196
+	g_impactNode(g_impactNode::g_impactNode96,2209
+	g_impactNode(g_impactNode::g_impactNode100,2246
+vector<g_impactNode> *currentNodes currentNodes106,2311
+struct g_impact 108,2357
+	uint _nodes[g_impact::_nodes109,2376
+	bool _frees[g_impact::_frees110,2394
+	REAL _w[g_impact::_w111,2412
+	ImpactType _type;g_impact::_type113,2428
+	REAL _t;g_impact::_t114,2448
+	Vec3 _n;g_impact::_n115,2459
+	g_impact(g_impact::g_impact117,2472
+	g_impact(g_impact::g_impact127,2699
+	void print(g_impact::print134,2960
+struct g_impactZone 145,3250
+	vector<uint> _nodes;g_impactZone::_nodes146,3273
+	vector<bool>  _frees;g_impactZone::_frees147,3296
+	vector<g_impact> _impacts;g_impactZone::_impacts148,3320
+	bool _active;g_impactZone::_active149,3349
+	void print(g_impactZone::print151,3367
+void push_node_data(171,4123
+void push_node_vel(182,4382
+void collision_response_gpu(195,4666
+static int nthreads 285,6776
+bool operator < operator <288,6828
+bool operator == operator ==307,7226
+bool operator < operator <312,7349
+vector<g_impact> independent_impacts(324,7585
+bool is_in(340,8029
+bool conflict(349,8192
+void add_impacts(363,8771
+bool is_in(387,9564
+g_impactZone *find_or_create_zone(find_or_create_zone399,9825
+void merge_zones(412,10166
+void merge_zones(419,10358
+inline REAL get_mass(432,10669
+inline Vec3 get_x(442,10860
+inline Vec3 get_x0(449,11008
+inline Vec3 get_xold(456,11158
+inline void set_x(463,11310
+struct gNormalOpt 473,11494
+	g_impactZone *_zone;gNormalOpt::_zone474,11533
+	REAL _inv_m;gNormalOpt::_inv_m475,11556
+	gNormalOpt(gNormalOpt::gNormalOpt476,11571
+	gNormalOpt(gNormalOpt::gNormalOpt477,11632
+void apply_inelastic_projection(493,12270
+void gNormalOpt::initialize(502,12426
+void gNormalOpt::precompute(508,12598
+REAL gNormalOpt::objective(515,12815
+void gNormalOpt::obj_grad(526,13106
+gNormalOpt::constraint(536,13395
+gNormalOpt::con_grad(551,13735
+void gNormalOpt::finalize(562,14039
+
+conf.cpp,1462
+template <int n> void parse 31,631
+template <typename T> void parse 38,850
+template <typename T> void parse 45,1012
+void load_json 62,1747
+void complain 125,4574
+void parse 130,4742
+void parse 134,4870
+void parse 138,5000
+void parse 142,5130
+struct Range 147,5265
+    REAL &min,Range::min148,5281
+    REAL &min, &max;Range::max148,5281
+    Range Range::Range149,5303
+void parse 152,5366
+struct Box 163,5647
+    Vec2 umin,Box::umin164,5661
+    Vec2 umin, umax;Box::umax164,5661
+    Box Box::Box165,5683
+    Box Box::Box166,5698
+void parse 169,5777
+struct Velocity 185,6184
+struct Velocity {Vec3 v,Velocity::v185,6184
+struct Velocity {Vec3 v, w;Velocity::w185,6184
+struct Velocity {Vec3 v, w; Vec3 o;Velocity::o185,6184
+void parse 189,6328
+void parse 207,6988
+void parse 216,7352
+void apply_velocity 222,7565
+void parse 229,7823
+void parse 258,9114
+void parse_motions 271,9650
+void parse 293,10468
+void parse 300,10732
+void parse_handles 319,11319
+void parse_handle 341,12281
+void parse_node_handle 370,13371
+void parse_circle_handle 404,14506
+void parse_glue_handle 422,15170
+void parse_attach_handle(440,15773
+void parse_obstacles 464,16376
+void parse_obstacle 490,17275
+void parse_morphs 509,18037
+void parse_morph 516,18287
+void parse 546,19428
+void parse 552,19639
+#define PARSE_MAGIC(553,19693
+#undef PARSE_MAGIC573,20449
+void load_material_data 581,20599
+void parse 597,21194
+void parse 607,21523
+
+constraint.cpp,703
+REAL EqCon::value 7,77
+MeshGrad EqCon::gradient 11,172
+MeshGrad EqCon::project 12,247
+REAL EqCon::energy 13,296
+REAL EqCon::energy_grad 14,358
+REAL EqCon::energy_hess 15,418
+MeshGrad EqCon::friction 16,472
+REAL GlueCon::value 18,546
+MeshGrad GlueCon::gradient 22,657
+MeshGrad GlueCon::project 28,782
+REAL GlueCon::energy 29,833
+REAL GlueCon::energy_grad 30,897
+REAL GlueCon::energy_hess 31,959
+MeshGrad GlueCon::friction 32,1015
+REAL IneqCon::value 34,1091
+MeshGrad IneqCon::gradient 44,1310
+MeshGrad IneqCon::project 51,1453
+REAL violation(66,1896
+REAL IneqCon::energy 68,1965
+REAL IneqCon::energy_grad 72,2092
+REAL IneqCon::energy_hess 75,2208
+MeshGrad IneqCon::friction 79,2319
+
+constraint.hpp,862
+typedef std::map<Node*Node11,167
+typedef std::map<Node*, Vec3> MeshGrad;11,167
+typedef std::map<std::pair<std::pair12,208
+typedef std::map<std::pair<Node*, Node*>, Mat3x3> MeshHess;12,208
+struct Constraint 14,271
+	virtual ~Constraint(Constraint::~Constraint15,292
+	virtual void apply(Constraint::apply27,677
+struct EqCon 30,709
+	Node *node;EqCon::node32,772
+	Vec3 x,EqCon::x33,786
+	Vec3 x, n;EqCon::n33,786
+	REAL stiff;EqCon::stiff34,799
+	void apply(EqCon::apply42,1026
+struct GlueCon 45,1064
+	Node *nodes[GlueCon::nodes46,1102
+	Vec3 n;GlueCon::n47,1120
+	REAL stiff;GlueCon::stiff48,1130
+struct IneqCon 58,1363
+	Node *nodes[IneqCon::nodes60,1437
+	REAL w[IneqCon::w61,1455
+	bool free[IneqCon::free62,1468
+	Vec3 n;IneqCon::n63,1484
+	REAL a;IneqCon::a64,1494
+	REAL mu;IneqCon::mu65,1512
+	REAL stiff;IneqCon::stiff66,1535
+
+dde.cpp,181
+static const int nsamples 9,93
+void evaluate_stretching_samples 13,210
+Vec4 evaluate_stretching_sample 26,754
+Vec4 stretching_stiffness 61,2249
+REAL bending_stiffness 100,3605
+
+dde.hpp,285
+typedef Vec<4> Vec4;6,63
+struct StretchingData 9,101
+struct StretchingData { Vec4 d[StretchingData::d9,101
+struct StretchingSamples 11,145
+struct StretchingSamples { Vec4 s[StretchingSamples::s11,145
+struct BendingData 13,198
+struct BendingData { REAL d[BendingData::d13,198
+
+eigen.cpp,215
+typedef SparseMatrix<REAL> EigenSpMat;10,144
+typedef Triplet<REAL> T;11,184
+typedef VectorXd EigenVec;14,231
+typedef VectorXf EigenVec;16,266
+sparse_to_eigen(20,310
+std::vector<REAL> eigen_linear_solve(35,695
+
+equilibration.cpp,174
+void validate_handles(10,182
+vector<Constraint*> get_constraints(25,564
+void delete_constraints(38,1003
+void equilibration_step(43,1127
+void relax_initial_state(60,1670
+
+geometry.cpp,255
+REAL unwrap_angle(7,73
+template <> const Vec3 &pos<pos16,254
+template <> const Vec3 &pos<pos17,325
+template <> Vec3 &pos<pos18,396
+template <> Vec3 &pos<pos19,455
+template <Space s> Vec3 nor(21,516
+template <Space s> REAL dihedral_angle(30,814
+
+geometry.hpp,83
+enum Space 6,60
+enum Space {PS,Space::PS6,60
+enum Space {PS, WS}Space::WS6,60
+
+gpu.cpp,3324
+#define ONE_PASS_CD8,122
+vector<Vec3> totalVert;10,145
+static int tidx;11,170
+void check_step(25,773
+void update_mesh_gpu(52,1909
+void push_node_gpu(106,2958
+void pop_mesh_gpu(125,3286
+void push_mesh_gpu(140,3526
+void push_node_gpu(306,7216
+void push_cloth_gpu(312,7331
+void push_obstacle_gpu(318,7454
+void update_obstacle_gpu(326,7644
+void push_material_gpu(333,7856
+void pop_cloth_gpu(362,8461
+void push_nodes_gpu(392,9114
+bvh *bvhC bvhC402,9342
+void visualize_cones(407,9427
+void visualize_cones(427,9828
+void visualize_cones(432,9892
+void push_data_gpu(439,9936
+void update_obstacles_gpu(477,10910
+void update_obstacles(486,11094
+int getNodeID(531,12312
+void init_handles(550,12748
+void step_mesh(592,13827
+void collision_step_gpu(597,13961
+void load_animation(613,14439
+void advance_step_gpu(652,15431
+class vec3f 739,17482
+			double x,vec3f::x743,17528
+			double x, y,vec3f::y743,17528
+			double x, y, z;vec3f::z743,17528
+			double v[vec3f::v746,17566
+	FORCEINLINE vec3f(vec3f::vec3f751,17605
+	FORCEINLINE vec3f(vec3f::vec3f756,17661
+	FORCEINLINE vec3f(vec3f::vec3f763,17743
+	FORCEINLINE vec3f(vec3f::vec3f770,17829
+	FORCEINLINE double operator [] vec3f::operator []777,17937
+	FORCEINLINE double &operator [] vec3f::operator []778,18001
+	FORCEINLINE vec3f &operator += vec3f::operator +=781,18078
+	FORCEINLINE vec3f &operator -= vec3f::operator -=788,18192
+	FORCEINLINE vec3f &operator *= vec3f::operator *=795,18306
+	FORCEINLINE vec3f &operator /= vec3f::operator /=802,18408
+	FORCEINLINE void negate(vec3f::negate809,18510
+	FORCEINLINE vec3f operator - vec3f::operator -815,18579
+	FORCEINLINE vec3f operator+ vec3f::operator+819,18656
+	FORCEINLINE vec3f operator- vec3f::operator-824,18763
+	FORCEINLINE vec3f operator *(vec3f::operator *829,18870
+	FORCEINLINE vec3f operator /(vec3f::operator /834,18959
+	FORCEINLINE const vec3f cross(vec3f::cross840,19073
+	FORCEINLINE double dot(vec3f::dot845,19213
+	FORCEINLINE void normalize(vec3f::normalize849,19309
+	FORCEINLINE double length(vec3f::length860,19506
+	FORCEINLINE vec3f getUnit(vec3f::getUnit864,19591
+	FORCEINLINE bool isUnit(vec3f::isUnit868,19665
+	FORCEINLINE double infinityNorm(vec3f::infinityNorm873,19770
+	FORCEINLINE vec3f & set_value(vec3f::set_value878,19871
+	FORCEINLINE bool operator == vec3f::operator ==883,20008
+	FORCEINLINE bool equal_abs(vec3f::equal_abs887,20102
+	FORCEINLINE double squareLength(vec3f::squareLength891,20221
+	static vec3f zero(vec3f::zero895,20298
+	static vec3f axis(vec3f::axis900,20414
+	static vec3f xAxis(vec3f::xAxis917,20673
+	static vec3f yAxis(vec3f::yAxis919,20781
+	static vec3f zAxis(vec3f::zAxis921,20889
+class tri3f 926,20967
+	unsigned int _ids[tri3f::_ids928,20991
+	FORCEINLINE tri3f(tri3f::tri3f930,21017
+	FORCEINLINE tri3f(tri3f::tri3f934,21084
+	FORCEINLINE void set(tri3f::set938,21189
+	FORCEINLINE unsigned int id(tri3f::id944,21328
+	FORCEINLINE unsigned int id0(tri3f::id0945,21385
+	FORCEINLINE unsigned int id1(tri3f::id1946,21438
+	FORCEINLINE unsigned int id2(tri3f::id2947,21491
+	FORCEINLINE bool operator == tri3f::operator ==949,21546
+bool compressobjfile(957,21738
+void mergeVtxs(1082,24741
+void moveMesh(1147,26320
+LineTriangleIntersect(1160,26535
+bool bodyColliding(1193,27180
+
+handle.cpp,372
+static Vec3 directions[directions6,71
+Transformation normalize 11,282
+vector<Constraint*> NodeHandle::get_constraints 17,428
+vector<Constraint*> AttachHandle::get_constraints(36,1026
+vector<Constraint*> CircleHandle::get_constraints 57,1515
+inline Vec3 Interp(82,2402
+vector<Constraint*> GlueHandle::get_constraints 87,2486
+void add_position_constraints 119,3342
+
+handle.hpp,1972
+struct Handle 10,150
+	REAL start_time,Handle::start_time11,167
+	REAL start_time, end_time,Handle::end_time11,167
+	REAL start_time, end_time, fade_time;Handle::fade_time11,167
+	virtual ~Handle(Handle::~Handle12,207
+	bool active(Handle::active15,341
+	REAL strength(Handle::strength16,408
+struct NodeHandle 27,706
+	Node *node;NodeHandle::node28,743
+	const Motion *motion;NodeHandle::motion29,757
+	bool activated;NodeHandle::activated30,781
+	Vec3 x0;NodeHandle::x031,799
+	NodeHandle(NodeHandle::NodeHandle32,810
+	std::vector<Node*> get_nodes(NodeHandle::get_nodes34,899
+	int index;NodeHandle::index36,974
+	int mid;NodeHandle::mid37,987
+	void backup(NodeHandle::backup38,998
+	void resume(NodeHandle::resume52,1295
+struct CircleHandle 57,1377
+	Mesh *mesh;CircleHandle::mesh58,1416
+	int label;CircleHandle::label59,1430
+	const Motion *motion;CircleHandle::motion60,1443
+	REAL c;CircleHandle::c61,1467
+	Vec2 u;CircleHandle::u62,1494
+	Vec3 xc,CircleHandle::xc63,1504
+	Vec3 xc, dx0,CircleHandle::dx063,1504
+	Vec3 xc, dx0, dx1;CircleHandle::dx163,1504
+	std::vector<Node*> get_nodes(CircleHandle::get_nodes65,1577
+	void backup(CircleHandle::backup67,1645
+	void resume(CircleHandle::resume68,1686
+struct GlueHandle 73,1746
+	Node* nodes[GlueHandle::nodes74,1783
+	std::vector<Node*> get_nodes(GlueHandle::get_nodes76,1853
+	int indices[GlueHandle::indices83,1988
+	int mid[GlueHandle::mid84,2006
+	void backup(GlueHandle::backup85,2020
+	void resume(GlueHandle::resume114,2632
+struct AttachHandle 120,2775
+	int id1,AttachHandle::id1121,2814
+	int id1, id2,AttachHandle::id2121,2814
+	int id1, id2, cid,AttachHandle::cid121,2814
+	int id1, id2, cid, oid;AttachHandle::oid121,2814
+	bool init;AttachHandle::init122,2840
+	Vec3 offset;AttachHandle::offset123,2853
+	std::vector<Node*> get_nodes(AttachHandle::get_nodes125,2870
+	void backup(AttachHandle::backup128,2990
+	void resume(AttachHandle::resume129,3031
+
+init.cpp,23
+void init_cuda(12,284
+
+io.cpp,379
+void get_valid_line(20,315
+int load_obj_vertices(29,513
+void load_obj(56,1047
+void load_objs(162,3819
+static double angle(171,4044
+vector<Face*> triangulate(177,4240
+void save_obj(213,5305
+void save_objs(265,7153
+void save_transformation(274,7384
+void save_screenshot(295,8157
+void flip_image(326,9113
+void save_png(333,9346
+void ensure_existing_directory(380,10830
+
+magic.cpp,18
+Magic magic;3,24
+
+magic.hpp,1044
+struct Magic 6,73
+	bool fixed_high_res_mesh;Magic::fixed_high_res_mesh7,89
+	REAL handle_stiffness,Magic::handle_stiffness8,117
+	REAL handle_stiffness, collision_stiffness;Magic::collision_stiffness8,117
+	REAL repulsion_thickness,Magic::repulsion_thickness9,163
+	REAL repulsion_thickness, projection_thickness;Magic::projection_thickness9,163
+	REAL edge_flip_threshold;Magic::edge_flip_threshold10,213
+	REAL rib_stiffening;Magic::rib_stiffening11,241
+	bool combine_tensors;Magic::combine_tensors12,264
+	bool preserve_creases;Magic::preserve_creases13,288
+	int tm_load_ob;Magic::tm_load_ob16,335
+	bool tm_with_cd;Magic::tm_with_cd17,353
+	bool tm_with_ti;Magic::tm_with_ti18,372
+	bool tm_jacobi_preconditioner;Magic::tm_jacobi_preconditioner19,391
+	bool tm_use_gpu;Magic::tm_use_gpu20,424
+	bool tm_output_file;Magic::tm_output_file21,443
+	int tm_iterations;Magic::tm_iterations22,466
+	bool tm_self_cd;Magic::tm_self_cd23,487
+	bool tm_strain_limiting;Magic::tm_strain_limiting24,506
+	Magic(Magic::Magic26,535
+
+main.cpp,362
+double g_timing_start 7,85
+bool b[b9,115
+int win_w 10,129
+float DISP_SCALE 14,195
+char *dataPath;dataPath15,223
+int stFrame 16,240
+static int level 35,727
+float lightpos[lightpos37,752
+static char fpsBuffer[fpsBuffer40,797
+void CalculateFrameRate(42,828
+void initSetting(66,1514
+int main(71,1576
+void initModel(107,2328
+void quitModel(114,2447
+
+mesh.cpp,1538
+template <typename T1,9,134
+template <typename T1, typename T2> void check 9,134
+template <typename T1,16,435
+template <typename T1, typename T2> void not_null 16,435
+template <typename T1,22,629
+template <typename T1, typename T2> void not_any_null22,629
+template <typename T1,32,1000
+template <typename T1, typename T2> void not_all_null32,1000
+bool check_that_pointers_are_sane 43,1373
+bool check_that_contents_are_sane 84,2976
+void compute_ms_data 107,3803
+void compute_ms_data 116,4078
+void compute_ms_data 125,4342
+void compute_ms_data 134,4570
+void compute_ms_data 140,4719
+void compute_ws_data 155,5222
+void compute_ws_data 170,5763
+void compute_ws_data 174,5850
+void compute_ws_data 190,6449
+template <> const vector<Vert*> &get get201,6783
+template <> const vector<Node*> &get get202,6861
+template <> const vector<Edge*> &get get203,6939
+template <> const vector<Face*> &get get204,7017
+Edge *get_edge get_edge206,7097
+Vert *edge_vert edge_vert215,7339
+Vert *edge_opp_vert edge_opp_vert225,7608
+void connect 235,7883
+void Mesh::add 240,7986
+void Mesh::remove 247,8134
+void Mesh::add 256,8404
+void Mesh::remove 265,8645
+void Mesh::add 274,8915
+void Mesh::remove 282,9133
+void add_edges_if_needed 293,9463
+void Mesh::add 301,9717
+void Mesh::remove 316,10166
+void update_indices 328,10476
+void mark_nodes_to_preserve 339,10853
+void apply_transformation_onto 354,11306
+void apply_transformation 361,11582
+void update_x0 365,11703
+Mesh deep_copy 370,11835
+void delete_mesh 405,13228
+
+mesh.hpp,2320
+struct Vert 19,300
+	int label;Vert::label20,315
+	Vec2 u;Vert::u21,328
+	Node *node;Vert::node22,356
+	std::vector<Face*> adjf;Vert::adjf24,407
+	int index;Vert::index25,452
+	REAL a,Vert::a27,557
+	REAL a, m;Vert::m27,557
+	Sizing *sizing;Vert::sizing29,604
+	Vert(Vert::Vert31,640
+	explicit Vert(Vert::Vert32,652
+	explicit Vert(Vert::Vert34,725
+struct Node 38,816
+	int label;Node::label39,831
+	std::vector<Vert*> verts;Node::verts40,844
+	Vec3 y;Node::y41,872
+	Vec3 x,Node::x42,903
+	Vec3 x, x0,Node::x042,903
+	Vec3 x, x0, v;Node::v42,903
+	bool preserve;Node::preserve43,973
+	int index;Node::index45,1038
+	std::vector<Edge*> adje;Node::adje46,1077
+	Vec3 n;Node::n48,1177
+	REAL a,Node::a50,1282
+	REAL a, m;Node::m50,1282
+	Vec3 acceleration;Node::acceleration52,1330
+	Vec3 f;Node::f53,1351
+	Node(Node::Node55,1375
+	explicit Node(Node::Node56,1387
+	explicit Node(Node::Node58,1509
+	explicit Node(Node::Node60,1616
+struct Edge 64,1720
+	Node *n[Edge::n65,1735
+	int label;Edge::label66,1758
+	Face *adjf[Edge::adjf68,1793
+	int index;Edge::index69,1828
+	REAL theta;Edge::theta71,1922
+	REAL l;Edge::l73,1994
+	REAL theta_ideal,Edge::theta_ideal75,2035
+	REAL theta_ideal, damage;Edge::damage75,2035
+	REAL reference_angle;Edge::reference_angle76,2104
+	Edge(Edge::Edge78,2192
+	explicit Edge(Edge::Edge79,2204
+	explicit Edge(Edge::Edge86,2417
+struct Face 94,2595
+	Vert* v[Face::v95,2610
+	int label;Face::label96,2633
+	Edge *adje[Face::adje98,2668
+	int index;Face::index99,2703
+	Vec3 n;Face::n101,2797
+	REAL a,Face::a103,2896
+	REAL a, m;Face::m103,2896
+	Mat2x2 Dm,Face::Dm104,2923
+	Mat2x2 Dm, invDm;Face::invDm104,2923
+	Mat2x2 S_plastic;Face::S_plastic106,2989
+	REAL damage;Face::damage107,3027
+	Face(Face::Face109,3101
+	explicit Face(Face::Face110,3113
+struct Mesh 120,3309
+	std::vector<Vert*> verts;Mesh::verts121,3324
+	std::vector<Node*> nodes;Mesh::nodes122,3352
+	std::vector<Edge*> edges;Mesh::edges123,3380
+	std::vector<Face*> faces;Mesh::faces124,3408
+	Vec3 *_x,Mesh::_x136,3733
+	Vec3 *_x, *_x0;Mesh::_x0136,3733
+	Mesh(Mesh::Mesh138,3753
+	~Mesh(Mesh::~Mesh142,3790
+	Node *find_node(Mesh::find_node147,3858
+inline Vec2 derivative(173,4642
+Mat<n, 2> derivative(177,4785
+inline Mat2x3 derivative(180,4915
+
+morph.hpp,257
+struct Morph 5,39
+	Mesh *mesh;Morph::mesh6,55
+	std::vector<Mesh> targets;Morph::targets7,69
+	typedef std::vector<REAL> Weights;Morph::Weights8,98
+	Spline<Weights> weights;Morph::weights9,135
+	Spline<REAL> log_stiffness;Morph::log_stiffness10,162
+
+mot_parser.cpp,675
+std::vector<Motion> load_mot 11,137
+bool is_all_whitespace(15,277
+size_t num_frames(23,457
+size_t num_bodies(30,596
+void append_frame(34,669
+void resize(44,1019
+BodyVector read_motion_file(53,1211
+BodyVector read_motion_file(62,1484
+void write_motion_file(126,3054
+void write_motion_file(134,3236
+BodyFrame& get_body_frame(160,4109
+BodyFrameVector& get_body_frames(169,4406
+Transformation bodyframe_to_transformation(176,4641
+vector<vector<Transformation> > body_vector_to_transforms(186,4995
+vector<vector<Transformation> > mot_to_transforms(200,5634
+Spline<Transformation> build_cubic_spline(208,5954
+vector<Spline<Transformation> > mot_to_spline(227,6734
+
+mot_parser.hpp,398
+typedef Vec<4> Vec4;14,278
+class mot_parser_exception 16,302
+	mot_parser_exception(mot_parser_exception::mot_parser_exception18,341
+	std::string error;mot_parser_exception::error19,408
+struct BodyFrame22,435
+	Vec3 pos;BodyFrame::pos24,456
+	Vec4 orient;BodyFrame::orient25,468
+typedef std::vector<BodyFrame> BodyFrameVector;28,489
+typedef std::vector<BodyFrameVector> BodyVector;29,538
+
+obstacle.cpp,244
+Mesh& Obstacle::get_mesh(12,176
+const Mesh& Obstacle::get_mesh(16,240
+Mesh& Obstacle::get_mesh(20,316
+void Obstacle::blend_with_previous 41,1068
+Obstacle::load_mesh(61,1668
+#define READ_FRAME_BY_FRAME63,1721
+Obstacle::load_mesh(216,5175
+
+obstacle.hpp,372
+struct Obstacle 10,242
+	REAL start_time,Obstacle::start_time12,270
+	REAL start_time, end_time;Obstacle::end_time12,270
+	bool activated;Obstacle::activated13,299
+	const Motion *transform_spline;Obstacle::transform_spline29,761
+	Mesh base_mesh;Obstacle::base_mesh32,855
+	Mesh curr_state_mesh;Obstacle::curr_state_mesh34,923
+	Obstacle(Obstacle::Obstacle36,949
+
+optimization.hpp,1220
+#define OPTIMIZATION_HPP3,28
+struct NLOpt 10,120
+    int nvar;NLOpt::nvar12,197
+    virtual void precompute NLOpt::precompute15,317
+    virtual bool hessian NLOpt::hessian17,434
+struct NLConOpt 23,628
+    int nvar,NLConOpt::nvar25,747
+    int nvar, ncon;NLConOpt::ncon25,747
+	virtual void precompute(NLConOpt::precompute27,820
+struct OptOptions 38,1263
+    int _max_iter;OptOptions::_max_iter39,1284
+    REAL _eps_x,OptOptions::_eps_x40,1304
+    REAL _eps_x, _eps_f,OptOptions::_eps_f40,1304
+    REAL _eps_x, _eps_f, _eps_g;OptOptions::_eps_g40,1304
+    OptOptions OptOptions::OptOptions41,1338
+    OptOptions &max_iter OptOptions::max_iter44,1522
+    OptOptions &eps_x OptOptions::eps_x45,1587
+    OptOptions &eps_f OptOptions::eps_f46,1647
+    OptOptions &eps_g OptOptions::eps_g47,1707
+    int max_iter OptOptions::max_iter48,1767
+    REAL eps_x OptOptions::eps_x49,1808
+    REAL eps_f OptOptions::eps_f50,1844
+    REAL eps_g OptOptions::eps_g51,1880
+inline Vec3 get_subvec 76,2856
+inline void set_subvec(78,2956
+inline void add_subvec(80,3068
+template <int n> Vec<n> get_subvec(83,3183
+template <int n> void set_subvec 85,3316
+template <int n> void add_subvec(87,3441
+
+popfilter.cpp,781
+static REAL mu;11,231
+struct PopOpt:PopOpt13,250
+    Cloth &cloth;PopOpt::cloth20,559
+    Mesh &mesh;PopOpt::mesh21,578
+    const vector<Constraint*> &cons;PopOpt::cons22,595
+    vector<Vec3> x0,PopOpt::x023,633
+    vector<Vec3> x0, a0;PopOpt::a023,633
+    mutable vector<Vec3> f;PopOpt::f24,659
+    mutable SpMat<Mat3x3> J;PopOpt::J25,688
+    PopOpt PopOpt::PopOpt26,718
+void apply_pop_filter 50,1559
+inline void _set_subvec(60,1932
+inline Vec3 _get_subvec(65,2049
+void PopOpt::initialize 69,2159
+void PopOpt::precompute 74,2293
+REAL PopOpt::objective 85,2692
+void PopOpt::gradient 98,3152
+static Mat3x3 get_submat 106,3416
+static void set_submat 112,3620
+static void add_submat 116,3807
+bool PopOpt::hessian 121,3997
+void PopOpt::finalize 134,4424
+
+popfilter.hpp,27
+#define POPFILTER_HPP3,25
+
+real.hpp,38
+#define REAL 6,59
+#define REAL 8,87
+
+save.cpp,138
+static void save_obstacle_transforms(7,95
+static void save(22,563
+void save(30,785
+static void save_gpu(38,992
+void save_gpu(47,1216
+
+separateobs.cpp,1533
+namespace SO 12,223
+static const int max_iter SO::max_iter14,241
+static vector<Vec3> xold;SO::xold16,277
+static vector<Vec3> nold;SO::nold17,304
+typedef Vec3 Bary;SO::Bary19,333
+struct Ixn SO::Ixn21,382
+    Face *f0,SO::Ixn::f022,411
+    Face *f0, *f1;SO::Ixn::f122,411
+    Bary b0,SO::Ixn::b023,431
+    Bary b0, b1;SO::Ixn::b123,431
+    Vec3 n;SO::Ixn::n24,449
+    Ixn SO::Ixn::Ixn25,462
+    Ixn SO::Ixn::Ixn26,477
+ostream &operator<< operator<<30,637
+vector<Vec3> face_normals 39,1057
+void separate_obstacles 47,1270
+Vec3 pos 82,2507
+void update_active 87,2660
+static int nthreads 100,3154
+static vector<Ixn> *ixns ixns101,3180
+vector<Ixn> find_intersections 105,3287
+void find_face_intersection 127,4124
+bool adjacent 140,4606
+bool intersection_midpoint 152,4998
+bool face_plane_intersection 174,5933
+int major_axis 199,6689
+bool farthest_points 209,7124
+REAL vf_clear_distance 218,7519
+REAL ee_clear_distance 245,8471
+struct SeparationOpt:SeparationOpt278,9784
+    const vector<Ixn> &ixns;SeparationOpt::ixns279,9825
+    vector<Node*> nodes;SeparationOpt::nodes280,9855
+    REAL inv_m;SeparationOpt::inv_m281,9881
+    SeparationOpt SeparationOpt::SeparationOpt282,9898
+void solve_ixns 301,10649
+void SeparationOpt::initialize 305,10754
+REAL SeparationOpt::objective 310,10895
+void SeparationOpt::obj_grad 320,11194
+REAL SeparationOpt::constraint 328,11480
+void SeparationOpt::con_grad 343,12017
+void SeparationOpt::finalize 356,12499
+void separate_obstacles 363,12651
+
+separateobs.hpp,29
+#define SEPARATEOBS_HPP2,25
+
+simulation.cpp,785
+Simulation sim;19,305
+static vector<Mesh*> &meshes meshes20,322
+Simulation *glSim;glSim22,374
+string outprefix;24,396
+template <typename Prim> int size(28,440
+template <typename Prim> int get_index(38,808
+template <typename Prim> Prim *get(get54,1366
+vector<Vec3> node_positions(69,1820
+void prepare(78,2056
+void init_physics(99,2702
+void init_resume(109,2909
+bool sim_step_gpu(146,3827
+Vec3 area_color2(176,4526
+Vec3 friction_color(193,4963
+void node_color(207,5370
+void normal(218,5630
+void vertex(223,5699
+void draw_mesh(231,5831
+void draw_meshes(302,7836
+void draw_seam_or_boundary_edges(309,7989
+void draw_handles(326,8377
+void checkModel(353,8935
+void drawModel(362,9029
+bool dynamicModel(402,9830
+void key_s(407,9902
+void Simulation::reset(413,9982
+
+simulation.hpp,1862
+struct Wind 12,213
+	REAL density;Wind::density13,228
+	Vec3 velocity;Wind::velocity14,244
+	REAL drag;Wind::drag15,261
+struct Simulation 18,280
+	REAL time;Simulation::time20,316
+	int frame,Simulation::frame21,329
+	int frame, step;Simulation::step21,329
+	std::vector<Cloth> cloths;Simulation::cloths22,348
+	int frame_steps;Simulation::frame_steps24,392
+	REAL frame_time,Simulation::frame_time25,411
+	REAL frame_time, step_time;Simulation::step_time25,411
+	REAL end_time,Simulation::end_time26,441
+	REAL end_time, end_frame;Simulation::end_frame26,441
+	std::vector<Motion> motions;Simulation::motions27,469
+	std::vector<Handle*> handles;Simulation::handles28,500
+	std::vector<Obstacle> obstacles;Simulation::obstacles29,532
+	std::vector<Morph> morphs;Simulation::morphs30,567
+	Vec3 gravity;Simulation::gravity31,596
+	Wind wind;Simulation::wind32,612
+	REAL friction,Simulation::friction33,625
+	REAL friction, obs_friction;Simulation::obs_friction33,625
+		Proximity,Simulation::Proximity35,665
+		Proximity, Physics,Simulation::Physics35,665
+		Proximity, Physics, StrainLimiting,Simulation::StrainLimiting35,665
+		Proximity, Physics, StrainLimiting, Collision,Simulation::Collision35,665
+		Proximity, Physics, StrainLimiting, Collision, Remeshing,Simulation::Remeshing35,665
+		Proximity, Physics, StrainLimiting, Collision, Remeshing, Separation,Simulation::Separation35,665
+		PopFilter,Simulation::PopFilter36,738
+		PopFilter, Plasticity,Simulation::Plasticity36,738
+		PopFilter, Plasticity, nModulesSimulation::nModules36,738
+	bool enabled[Simulation::enabled38,778
+	Timer timers[Simulation::timers39,804
+	std::vector<Mesh*> cloth_meshes,Simulation::cloth_meshes41,850
+	std::vector<Mesh*> cloth_meshes, obstacle_meshes;Simulation::obstacle_meshes41,850
+	bool is_in_gpu;Simulation::is_in_gpu44,917
+
+sparse.hpp,747
+#define SPARSE_HPP2,20
+inline size_t find_index 9,124
+template <typename T> void insert_index 16,333
+template <typename T> struct SpVec 23,625
+    std::vector<int> indices;SpVec::indices24,663
+    std::vector<T> entries;SpVec::entries25,694
+std::ostream &operator<< operator<<42,1215
+template <typename T> struct SpMat 50,1462
+    int m,SpMat::m51,1500
+    int m, n;SpMat::n51,1500
+    std::vector< SpVec<T> > rows;SpMat::rows52,1515
+    SpMat SpMat::SpMat53,1550
+    explicit SpMat SpMat::SpMat54,1587
+    T operator() SpMat::operator()55,1646
+    T &operator() SpMat::operator()58,1722
+	void apply(SpMat::apply62,1826
+	void apply_transpose(SpMat::apply_transpose79,2172
+std::ostream &operator<< operator<<100,2607
+
+spline.cpp,211
+static int find 10,212
+T Spline<T>::pos pos21,486
+T Spline<T>::vel vel38,1039
+vector<REAL> operator+ 50,1432
+vector<REAL> operator- 55,1629
+vector<REAL> operator* 60,1826
+vector<REAL> operator/ 65,1988
+
+spline.hpp,315
+class Spline 8,104
+	struct Point Spline::Point11,181
+	struct Point { REAL t;Spline::Point::t11,181
+	struct Point { REAL t; T x,Spline::Point::x11,181
+	struct Point { REAL t; T x, v;Spline::Point::v11,181
+	std::vector<Point> points;Spline::points12,217
+template <typename T> void fill_in_velocity(24,612
+
+strainlimiting.cpp,1118
+vector<Vec2> get_strain_limits 8,115
+struct SLOpt:SLOpt25,792
+    vector<Mesh*> meshes;SLOpt::meshes26,825
+    int nn,SLOpt::nn27,852
+    int nn, nf;SLOpt::nf27,852
+    const vector<Vec2> &strain_limits;SLOpt::strain_limits28,869
+    const vector<Constraint*> &cons;SLOpt::cons29,909
+    vector<Vec3> xold;SLOpt::xold30,947
+    vector<double> conold;SLOpt::conold31,971
+    mutable vector<double> s;SLOpt::s32,999
+    mutable vector<Mat3x3> sg;SLOpt::sg33,1030
+    REAL inv_m;SLOpt::inv_m34,1062
+    SLOpt SLOpt::SLOpt35,1079
+void strain_limiting_opt62,2226
+void strain_limiting_jaccobi73,2515
+void strain_limiting153,4651
+void SLOpt::initialize 160,4881
+void SLOpt::precompute 167,5059
+REAL SLOpt::objective 191,5998
+void SLOpt::obj_grad 202,6302
+REAL SLOpt::constraint 215,6764
+void SLOpt::con_grad 222,6983
+REAL strain_con 238,7565
+void strain_con_grad 264,8397
+void add_strain_row 279,8962
+void SLOpt::finalize 288,9284
+void debug_cpu 295,9436
+static Mesh mesh;324,10345
+void debug_gpu(326,10366
+void output_gpu(353,10990
+#define OBJ_FILE 363,11147
+void debug(366,11236
+
+strainlimiting.hpp,32
+#define STRAINLIMITING_HPP2,28
+
+timer.cpp,99
+Timer::Timer(11,155
+void Timer::tick(15,204
+void Timer::tock(22,315
+double Timer::tock2(36,564
+
+timer.hpp,1187
+struct Timer 12,203
+	boost::posix_time::ptime then;Timer::then14,237
+	double last,Timer::last16,278
+	double last, total,Timer::total16,278
+	double last, total, then;Timer::then16,278
+	void tick(Timer::tick19,319
+struct GPUTimer2 23,366
+	cudaEvent_t start,GPUTimer2::start25,396
+	cudaEvent_t start, stop;GPUTimer2::stop25,396
+	float		accum;GPUTimer2::accum26,423
+	GPUTimer2(GPUTimer2::GPUTimer229,450
+	~GPUTimer2(GPUTimer2::~GPUTimer233,535
+	void tick(GPUTimer2::tick39,631
+	void tock(GPUTimer2::tock44,736
+	float tock(GPUTimer2::tock50,874
+	float tock2(GPUTimer2::tock260,1120
+	void printTime(GPUTimer2::printTime69,1333
+	void reset(GPUTimer2::reset75,1529
+	void reset(GPUTimer2::reset78,1564
+	void tick(GPUTimer2::tick83,1668
+	void tock(GPUTimer2::tock85,1688
+	float tock(GPUTimer2::tock87,1708
+	float tock2(GPUTimer2::tock290,1757
+	void printTime(GPUTimer2::printTime93,1792
+	void reset(GPUTimer2::reset95,1848
+	void reset(GPUTimer2::reset97,1869
+# define	TIMING_BEGIN 103,1937
+# define	TIMING_END(106,2009
+# define	TIMING_BEGIN 112,2170
+# define	TIMING_END(113,2195
+# define	TIMING_BEGIN1 116,2237
+# define	TIMING_END1(119,2310
+
+tmbvh.cpp,977
+static vector<Mesh *>  *ptCloth;ptCloth22,302
+void self_mesh(24,338
+class aap 30,409
+	char _xyz;aap::_xyz32,431
+	float _p;aap::_p33,444
+	FORCEINLINE aap(aap::aap35,458
+	FORCEINLINE bool inside(aap::inside50,792
+bvh::bvh(55,878
+static vec3f *s_fcenters;s_fcenters114,1951
+static BOX *s_fboxes;s_fboxes115,1978
+static unsigned int *s_idx_buffer;s_idx_buffer116,2001
+static bvh_node *s_current;s_current117,2037
+static vec3i *s_nidx;s_nidx118,2066
+void bvh::construct(120,2091
+void bvh::construct(193,3526
+void bvh::resetParents(284,5491
+void bvh::refit(289,5557
+void bvh::reorder(297,5660
+void bvh::push2GPU(356,7014
+bvh_node::construct(435,8912
+bvh_node::construct(442,9002
+REAL *__getVtx(__getVtx487,9913
+contour::visualize(499,10108
+bvh_node::visualizeBound(524,10515
+bvh_node::visualize(530,10592
+bvh_node::refit(548,10893
+bvh_node::resetParents(572,11265
+front_list::push2GPU(591,11589
+void mesh_id(619,12137
+bool covertex(636,12439
+
+tmbvh.hpp,2674
+typedef Vec3 vec3f;10,117
+typedef Vec<3, int> vec3i;11,138
+vmin(14,186
+vmax(23,321
+class aabb 32,440
+	FORCEINLINE void init(aabb::init33,454
+	vec3f _min;aabb::_min39,588
+	vec3f _max;aabb::_max40,602
+	FORCEINLINE aabb(aabb::aabb42,618
+	FORCEINLINE aabb(aabb::aabb46,658
+	FORCEINLINE aabb(aabb::aabb50,721
+	FORCEINLINE bool overlaps(aabb::overlaps57,842
+	FORCEINLINE bool overlaps(aabb::overlaps70,1173
+	FORCEINLINE bool inside(aabb::inside88,1531
+	FORCEINLINE aabb &operator += aabb::operator +=97,1772
+	FORCEINLINE aabb &operator += aabb::operator +=104,1884
+	FORCEINLINE aabb operator + aabb::operator +111,2005
+	FORCEINLINE REAL width(aabb::width114,2098
+	FORCEINLINE REAL height(aabb::height115,2162
+	FORCEINLINE REAL depth(aabb::depth116,2226
+	FORCEINLINE vec3f center(aabb::center117,2290
+	FORCEINLINE REAL volume(aabb::volume118,2359
+	FORCEINLINE bool empty(aabb::empty121,2434
+	FORCEINLINE void enlarge(aabb::enlarge125,2504
+	vec3f getMax(aabb::getMax130,2657
+	vec3f getMin(aabb::getMin131,2691
+	void print(aabb::print133,2727
+#define MAX(140,2884
+#define MIN(141,2926
+#define BOX 142,2968
+class front_node 148,3038
+	bvh_node *_left,front_node::_left150,3067
+	bvh_node *_left, *_right;front_node::_right150,3067
+	unsigned int _flag;front_node::_flag151,3095
+	unsigned int _ptr;front_node::_ptr152,3134
+	FORCEINLINE front_node(front_node::front_node154,3182
+	void update front_node::update160,3313
+class front_list 196,4021
+class bvh_node 202,4158
+	BOX _box;bvh_node::_box203,4176
+	int _child;bvh_node::_child204,4188
+	int _parent;bvh_node::_parent205,4243
+	contour _bound;bvh_node::_bound206,4258
+	void setParent(bvh_node::setParent208,4278
+	int get_bound_length(bvh_node::get_bound_length211,4330
+	int get_bound_idx(bvh_node::get_bound_idx218,4465
+	bvh_node(bvh_node::bvh_node223,4550
+	~bvh_node(bvh_node::~bvh_node228,4602
+	void collide(bvh_node::collide232,4633
+	void self_collide(bvh_node::self_collide255,5206
+	FORCEINLINE BOX &box(bvh_node::box275,5778
+	FORCEINLINE bvh_node *left(bvh_node::left276,5820
+	FORCEINLINE bvh_node *right(bvh_node::right277,5877
+	FORCEINLINE int triID(bvh_node::triID278,5939
+	FORCEINLINE int isLeaf(bvh_node::isLeaf279,5984
+	FORCEINLINE int parentID(bvh_node::parentID280,6035
+	FORCEINLINE void getLevel(bvh_node::getLevel282,6086
+	FORCEINLINE void getLevelIdx(bvh_node::getLevelIdx291,6318
+class bvh 304,6558
+	int _num;bvh::_num305,6571
+	bvh_node *_nodes;bvh::_nodes306,6599
+	~bvh(bvh::~bvh317,6896
+	bvh_node *root(bvh::root322,6951
+	void collide(bvh::collide326,7016
+	void self_collide(bvh::self_collide336,7183
+
+transformation.cpp,1079
+Transformation identityT bvh::identityT6,59
+Transformation inverse(10,125
+Quaternion inverse(23,442
+Quaternion Quaternion::from_axisangle(31,611
+pair<Vec3, REAL> Quaternion::to_axisangle(43,881
+Transformation::Transformation(54,1138
+Transformation Transformation::operator-(60,1302
+Transformation Transformation::operator+(68,1577
+Transformation Transformation::operator*(76,1852
+Transformation Transformation::operator*(85,2186
+Transformation Transformation::operator/(93,2401
+Quaternion Quaternion::operator+(97,2492
+Quaternion Quaternion::operator-(104,2658
+Quaternion Quaternion::operator-(111,2824
+Quaternion Quaternion::operator*(118,2949
+Quaternion Quaternion::operator*(126,3207
+Quaternion Quaternion::operator/(133,3344
+Vec3 Quaternion::rotate 137,3427
+Vec3 Transformation::apply 142,3573
+Vec3 Transformation::apply_vec 146,3682
+REAL norm2(150,3775
+Quaternion normalize 154,3849
+void clean_up_quaternions 162,4009
+Transformation get_trans 172,4329
+DTransformation get_dtrans 178,4488
+Vec3 apply_dtrans 189,4876
+Vec3 apply_dtrans_vec 200,5277
+
+transformation.hpp,588
+struct Quaternion 9,130
+	REAL s;Quaternion::s10,151
+	Vec3 v;Quaternion::v11,161
+	std::pair<Quaternion::std::pair14,277
+inline std::ostream &operator<< operator<<26,720
+struct Transformation 28,853
+	Vec3 translation;Transformation::translation29,878
+	REAL scale;Transformation::scale30,898
+	Quaternion rotation;Transformation::rotation31,912
+inline std::ostream &operator<< operator<<44,1407
+typedef Spline<Transformation> Motion;46,1610
+typedef std::pair<Transformation,Transformation47,1650
+typedef std::pair<Transformation, Transformation> DTransformation;47,1650
+
+util.cpp,736
+template <typename T> string name(14,223
+ostream &operator<< operator<<20,390
+ostream &operator<< operator<<24,492
+ostream &operator<< operator<<28,609
+ostream &operator<< operator<<32,760
+const REAL infinity 36,932
+int solve_quadratic(38,991
+bool is_seam_or_boundary(56,1427
+bool is_seam_or_boundary(60,1514
+bool is_seam_or_boundary(67,1678
+bool is_seam_or_boundary(71,1807
+void debug_save_meshes(77,1973
+void debug_save_mesh(91,2293
+void output1(104,2593
+void input2(115,2866
+void output2(124,3033
+void output(133,3202
+void output(144,3426
+void output(164,3831
+void output9(184,4238
+void output12(207,4660
+void output3x9(226,4997
+void output9x9(243,5266
+void output3x12(267,5678
+void output12x12(284,5949
+
+util.hpp,1095
+#define FORCEINLINE 12,188
+#define EPSILON	15,228
+#define NEXT(19,340
+#define PREV(20,381
+typedef unsigned int uint;22,424
+template <typename T> T interp(38,839
+template <typename T> T clamp(42,940
+template <typename T> T min(46,1052
+template <typename T> T min(49,1160
+template <typename T> T max(53,1295
+template <typename T> T max(56,1403
+template <typename T> T sgn(60,1538
+template <typename T> inline int find(66,1704
+template <typename T> inline int find(70,1854
+template <typename T> inline int find(74,2003
+template <typename T> inline bool is_in(78,2162
+template <typename T> inline bool is_in(82,2278
+template <typename T> inline bool is_in(86,2393
+template <typename T> inline void include(90,2507
+template <typename T> inline void remove(94,2627
+template <typename T> inline void exclude(98,2739
+template <typename T> inline void replace(102,2872
+inline void replace(107,3029
+inline bool subset(112,3175
+inline void append(118,3367
+std::ostream &operator<< operator<<136,3893
+#define ECHO(144,4090
+#define REPORT(146,4138
+#define REPORT_ARRAY(148,4204
+
+vectors.cpp,459
+#define LAPACKE_dgesvd 17,191
+#define LAPACKE_dsyev 18,223
+#define lapack_int 21,264
+#define LAPACK_ROW_MAJOR 22,288
+#define LAPACK_COL_MAJOR 23,318
+template <int n> Eig<n> eigen_decomposition 34,790
+template<> Eig<2> eigen_decomposition<eigen_decomposition50,1362
+template <int m,110,2944
+template <int m, int n> SVD<m,n> singular_value_decomposition 110,2944
+template<> SVD<3,2> singular_value_decomposition<singular_value_decomposition126,3518
+
+vectors.hpp,6250
+#define VECTORS_HPP3,23
+#define __align(16,400
+inline void* malloc_align(17,443
+inline void aligned_free(18,551
+#define __align(21,691
+inline void* malloc_align(24,783
+inline void aligned_free(32,969
+inline void* operator new(operator new36,1053
+inline void* operator new[](operator new[]37,1125
+inline void  operator delete(operator delete38,1197
+inline void  operator delete[](operator delete[]39,1263
+inline REAL sq 42,1339
+template <> struct static_assertion_failure<static_assertion_failure45,1435
+template <> struct static_assertion_failure<true> {void operator() static_assertion_failure::operator()45,1435
+#define static_assert(46,1511
+#define tpl 48,1576
+#define VecnT 49,1618
+template <int n,51,1644
+template <int n, typename T=51,1644
+tpl VecnT operator+ 67,2271
+tpl VecnT operator+ 68,2321
+tpl VecnT &operator+= operator+=69,2444
+tpl VecnT operator- 70,2514
+tpl VecnT operator- 71,2615
+tpl VecnT &operator-= operator-=72,2688
+tpl VecnT operator* 73,2758
+tpl VecnT operator* 74,2872
+tpl VecnT &operator*= operator*=75,2936
+tpl VecnT operator/ 76,3000
+tpl VecnT &operator/= operator/=77,3068
+tpl bool operator== operator==78,3132
+tpl bool operator!= operator!=79,3255
+tpl T dot 80,3327
+tpl T norm2 81,3436
+tpl T norm 82,3485
+tpl VecnT normalize 83,3539
+tpl std::ostream &operator<< operator<<84,3624
+template <typename T> Vec<3,T> cross 85,3787
+template <typename T> T stp 86,3978
+template <int m,87,4093
+template <int m, int n,87,4093
+template <int m, int n, typename T> Vec<m,T> project 87,4093
+template <typename T> Vec<2,T> perp 88,4241
+template<> inline Vec<3,REAL> operator+<3,REAL>(operator+<3,REAL>94,4404
+template<> inline Vec<3,REAL> operator-<3,REAL>(operator-<3,REAL>95,4578
+template<> inline Vec<3,REAL> operator*<3,REAL>(operator*<3,REAL>96,4752
+template<> inline Vec<3,REAL> operator/<3,REAL>(operator/<3,REAL>97,4925
+template<> inline Vec<3,REAL>& operator+=<3,REAL>(operator+=<3,REAL>99,5100
+template<> inline Vec<3,REAL>& operator-=<3,REAL>(operator-=<3,REAL>100,5258
+inline Vec<3,REAL>& operator*=(operator*=103,5503
+inline Vec<3,REAL>& operator/=(operator/=104,5647
+inline Vec<3,REAL>  operator*(105,5791
+inline Vec<3,REAL>  operator/(106,5947
+#undef tpl109,6113
+#undef VecnT110,6125
+typedef Vec<2> Vec2;112,6141
+typedef Vec<3> Vec3;113,6163
+#define tpl 115,6187
+#define MatmnT 116,6236
+#define MatnmT 117,6263
+#define MatnnT 118,6290
+#define VecmT 119,6317
+#define VecnT 120,6341
+template <int m,123,6406
+template <int m, int n,123,6406
+template <int m, int n, typename T=123,6406
+template <int m,125,6471
+template <int m, int n,125,6471
+template <int m, int n, typename T=125,6471
+    T &operator() operator()142,7786
+    const T &operator() operator()143,7838
+tpl MatmnT operator+ 150,8203
+tpl MatmnT operator+ 151,8255
+tpl MatmnT &operator+= operator+=152,8394
+tpl MatmnT operator- 153,8467
+tpl MatmnT operator- 154,8579
+tpl MatmnT &operator-= operator-=155,8655
+tpl MatmnT operator* 156,8728
+tpl MatmnT operator* 157,8853
+tpl MatmnT &operator*= operator*=158,8919
+tpl MatmnT operator/ 159,8985
+tpl MatmnT &operator/= operator/=160,9055
+tpl VecmT operator* 161,9121
+template <int m,162,9256
+template <int m, int n,162,9256
+template <int m, int n, int o,162,9256
+template <int m, int n, int o, typename T> Mat<m,o,T> operator* 162,9256
+tpl MatmnT *operator*= operator*=163,9441
+tpl MatnmT transpose 164,9518
+template <int n,165,9653
+template <int n, typename T> VecnT diag 165,9653
+template <int n,166,9776
+template <int n, typename T> T trace 166,9776
+template <typename T> T det 167,9894
+template <typename T> T det 168,9985
+template <typename T> Mat<2,2,T> inverse 169,10080
+template <typename T> T wedge 170,10226
+template <typename T> Mat<3,3,T> inverse 171,10328
+template <int n,172,10502
+template <int n, typename T> MatnnT diag 172,10502
+tpl MatmnT outer 173,10638
+tpl std::ostream &operator<< operator<<174,10758
+tpl T norm2_F 177,11011
+tpl T norm_F 178,11115
+template <int m1,180,11176
+template <int m1, int n1,180,11176
+template <int m1, int n1, int m2,180,11176
+template <int m1, int n1, int m2, int n2,180,11176
+template <int m1, int n1, int m2, int n2, typename T> Mat<m1,n1,T> project 180,11176
+#undef tpl182,11393
+#undef MatmnT183,11405
+#undef MatnnT184,11420
+#undef VecmT185,11435
+#undef VecnT186,11449
+typedef Mat<2,2> Mat2x2;188,11465
+typedef Mat<3,3> Mat3x3;189,11491
+typedef Mat<3,2> Mat3x2;190,11517
+typedef Mat<2,3> Mat2x3;191,11543
+template <int n> struct Eig 193,11571
+    Mat<Eig::Mat194,11602
+    Mat<n,n> Q;Eig::Q194,11602
+    Vec<n> l;Eig::l195,11619
+template <int m,201,11768
+template <int m, int n> struct SVD 201,11768
+    Mat<SVD::Mat202,11806
+    Mat<m,m> U;SVD::U202,11806
+    Vec<n> s;SVD::s203,11823
+    Mat<SVD::Mat204,11838
+    Mat<n,n> Vt;SVD::Vt204,11838
+template <int m,207,11862
+template <int m,211,12026
+template <int m, int n,211,12026
+template <int m, int n, int o,211,12026
+template <int m,212,12145
+template <int m, int n,212,12145
+template <int m,213,12255
+template <int m, int n,213,12255
+template <int m, int n, int o,213,12255
+template <int m,216,12415
+template <int m, int n,216,12415
+template <int m, int n, typename T> class MatTransposed 216,12415
+	template <int m1,MatTransposed::m1218,12579
+	template <int m1, int n1,MatTransposed::n1218,12579
+	template <int m1, int n1, int o,MatTransposed::o218,12579
+	template <int m1,MatTransposed::m1219,12717
+	template <int m1, int n1,MatTransposed::n1219,12717
+	template <int m1, int n1, int o,MatTransposed::o219,12717
+    const Mat<MatTransposed::Mat222,12869
+    const Mat<m,n,T>& t MatTransposed::t222,12869
+template <int m,225,12959
+template <int m, int n,225,12959
+template <int m, int n, typename T> Vec<n, T> operator* 225,12959
+template <int m,232,13160
+template <int m, int n,232,13160
+template <int m, int n, int o,232,13160
+template <int m, int n, int o, typename T> Mat<m,o,T> operator* 232,13160
+template <int m,245,13488
+template <int m, int n,245,13488
+template <int m, int n, int o,245,13488
+template <int m, int n, int o, typename T> Mat<m,o,T> operator* 245,13488
+#undef static_assert269,14107
+
+winport.hpp,286
+#define WINPORT_HPP3,23
+#define _USE_MATH_DEFINES 16,630
+#undef min20,720
+#undef max21,732
+#define snprintf 23,764
+template <class T> inline bool isfinite(27,867
+template <class T> inline bool   finite(28,966
+inline double sqrt(31,1075
+template <class T> inline T log2(33,1132
+
+save.hpp,0
+
+io.hpp,0
+
+equilibration.hpp,0
+
+eigen.hpp,0
+
+conf.hpp,0
+
+collision.hpp,0
+
+cloth.cpp,0

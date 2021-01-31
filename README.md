@@ -1,2 +1,2 @@
 # ClothSimulation
-Simulating...cloth...
+Implementation of ICLOTH by tangMin
