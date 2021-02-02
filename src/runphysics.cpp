@@ -28,6 +28,7 @@
 #include "conf.hpp"
 #include "io.hpp"
 #include "misc.hpp"
+#include "real.hpp"
 #include "separateobs.hpp"
 #include "simulation.hpp"
 #include "timer.hpp"
@@ -41,12 +42,14 @@
 
 using namespace std;
 
-static string outprefix;
+string outprefix;
 static fstream timingfile;
 
 Simulation sim;
+Simulation *glSim;
 Timer fps;
 
+extern bool USE_GPU;
 void copy_file (const string &input, const string &output);
 extern void parse_handles (vector<Handle*>&, const Json::Value&,
                      const vector<Cloth>&, const vector<Motion>&);
@@ -123,6 +126,8 @@ void save (Simulation &sim, int frame, int level, int step) {
 */
 }
 
+extern void advance_step_gpu (Simulation &sim);
+
 void sim_step(int level, int rest_level, Timer *timer, int largeStep, int reload) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -140,7 +145,12 @@ void sim_step(int level, int rest_level, Timer *timer, int largeStep, int reload
         cout << "done" << endl;
     }
     fps.tick();
-    advance_step(sim, rest_level, level == 1, largeStep);
+    if (USE_GPU) {
+        advance_step_gpu(sim);
+    }
+    else {
+        advance_step(sim, rest_level, level == 1, largeStep);
+    }
     if (sim.step % sim.frame_steps == 0 && rest_level == 0) {
         save(sim, sim.frame, level, sim.step % sim.frame_steps);
         //save_timings();
@@ -227,6 +237,7 @@ void init_resume(const vector<string> &args) {
     load_objs(sim.cloth_meshes, stringf("%s/%04d",outprefix.c_str(),sim.frame));
     prepare(sim); // re-prepare the new cloth meshes
     separate_obstacles(sim.obstacle_meshes, sim.cloth_meshes);
+    sim.is_in_gpu = false;
 }
 
 void resume_physics (const vector<string> &args) {

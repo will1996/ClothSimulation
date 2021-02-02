@@ -430,25 +430,6 @@ if (flag) node->dv -= (node->x - xold[n])*inv_dt;
     }
 }
 
-void update_obstacles (Simulation &sim, bool update_positions) {
-    double decay_time = 0.1,
-           blend = sim.step_time/decay_time;
-    blend = blend/(1 + blend);
-    for (int o = 0; o < sim.obstacles.size(); o++) {
-        sim.obstacles[o].get_mesh(sim.time, sim.frame, (double)sim.step/sim.frame_steps-sim.frame, sim.frame_time);
-        //sim.obstacles[o].blend_with_previous(sim.time, sim.step_time, blend);
-        if (!update_positions) {
-            // put positions back where they were
-            Mesh &mesh = sim.obstacles[o].get_mesh();
-            for (int n = 0; n < mesh.nodes.size(); n++) {
-                Node *node = mesh.nodes[n];
-                node->v = (node->x - node->x0)/sim.step_time;
-                node->x = node->x0;
-            }
-        }
-    }
-}
-
 // Helper functions
 
 template <typename Prim> int size (const vector<Mesh*> &meshes) {
@@ -497,4 +478,115 @@ vector<Vec3> node_positions (const vector<Mesh*> &meshes) {
     for (int n = 0; n < xs.size(); n++)
         xs[n] = get<Node>(n, meshes)->x;
     return xs;
+}
+
+void Simulation::reset()
+{
+	is_in_gpu = false;
+	// variables
+	time = 0.0;
+	frame = step = 0;
+
+	for (int i = 0; i < cloths.size(); i++)
+	{
+		Cloth &cloth = cloths[i];
+		for (int j = 0; j < cloth.materials.size(); j++)
+		{
+			delete cloth.materials[j];
+		}
+
+		Mesh &mesh = cloth.mesh;
+		for (int j = 0; j < mesh.verts.size(); j++)
+		{
+			delete mesh.verts[j];
+		}
+		for (int j = 0; j < mesh.nodes.size(); j++)
+		{
+			delete mesh.nodes[j];
+		}
+		for (int j = 0; j < mesh.edges.size(); j++)
+		{
+			delete mesh.edges[j];
+		}
+		for (int j = 0; j < mesh.faces.size(); j++)
+		{
+			delete mesh.faces[j];
+		}
+	}
+	//cloths.swap(vector<Cloth>());
+	cloths.clear();
+
+	// constants
+	frame_steps = 1;
+	frame_time = step_time = 0.005f;
+	end_time = end_frame = infinity;
+	//motions.swap(vector<Motion>());
+	motions.clear();
+	for (int i = 0; i < handles.size(); i++)
+	{
+		if (handles[i] != NULL) delete handles[i];
+	}
+	//handles.swap(vector<Handle*>());
+	handles.clear();
+
+	for (int i = 0; i < obstacles.size(); i++)
+	{
+		Obstacle &obs = obstacles[i];
+
+		Mesh &mesh = obs.base_mesh;
+		for (int j = 0; j < mesh.verts.size(); j++)
+		{
+			delete mesh.verts[j];
+		}
+		for (int j = 0; j < mesh.nodes.size(); j++)
+		{
+			delete mesh.nodes[j];
+		}
+		for (int j = 0; j < mesh.edges.size(); j++)
+		{
+			delete mesh.edges[j];
+		}
+		for (int j = 0; j < mesh.faces.size(); j++)
+		{
+			delete mesh.faces[j];
+		}
+
+		mesh = obs.curr_state_mesh;
+		for (int j = 0; j < mesh.verts.size(); j++)
+		{
+			delete mesh.verts[j];
+		}
+		for (int j = 0; j < mesh.nodes.size(); j++)
+		{
+			delete mesh.nodes[j];
+		}
+		for (int j = 0; j < mesh.edges.size(); j++)
+		{
+			delete mesh.edges[j];
+		}
+		for (int j = 0; j < mesh.faces.size(); j++)
+		{
+			delete mesh.faces[j];
+		}
+	}
+	//obstacles.swap(vector<Obstacle>());
+	obstacles.clear();
+
+	//morphs.swap(vector<Morph>());
+	morphs.clear();
+
+	gravity = Vec3(0, 0, -9.8);
+	wind.density = 0.0;
+	wind.drag = 0.0;
+	wind.velocity = Vec3(0, 0, 0);
+	friction = 0.6;
+	obs_friction = 0.3;
+
+	// handy pointers
+	//cloth_meshes.swap(vector<Mesh*>());
+	cloth_meshes.clear();
+	//obstacle_meshes.swap(vector<Mesh*>());
+	obstacle_meshes.clear();
+
+	for (int i = 0; i < nModules; i++) enabled[i] = true;
 }

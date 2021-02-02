@@ -1,6 +1,6 @@
 #include "SpatialHashHelper.cuh"
 //#include  <device_atomic_functions.hpp>
-#include "./cuda/box.cuh"
+#include "../box.cuh"
 
 
 inline __device__ void

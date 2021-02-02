@@ -1,29 +1,3 @@
-/*
-  Copyright ©2013 The Regents of the University of California
-  (Regents). All Rights Reserved. Permission to use, copy, modify, and
-  distribute this software and its documentation for educational,
-  research, and not-for-profit purposes, without fee and without a
-  signed licensing agreement, is hereby granted, provided that the
-  above copyright notice, this paragraph and the following two
-  paragraphs appear in all copies, modifications, and
-  distributions. Contact The Office of Technology Licensing, UC
-  Berkeley, 2150 Shattuck Avenue, Suite 510, Berkeley, CA 94720-1620,
-  (510) 643-7201, for commercial licensing opportunities.
-
-  IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT,
-  INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
-  LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS
-  DOCUMENTATION, EVEN IF REGENTS HAS BEEN ADVISED OF THE POSSIBILITY
-  OF SUCH DAMAGE.
-
-  REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-  FOR A PARTICULAR PURPOSE. THE SOFTWARE AND ACCOMPANYING
-  DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS
-  IS". REGENTS HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT,
-  UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
-*/
-
 #include "conf.hpp"
 
 #include "io.hpp"
@@ -33,13 +7,25 @@
 #include <cassert>
 #include <cfloat>
 #include <json/json.h>
+
+#ifdef _DEBUG
+#pragma  comment(lib,"json_libmtd.lib")
+#else
+#pragma  comment(lib,"json_libmt.lib")
+#endif
+
 #include <fstream>
-#include <png.h>
+#include <math.h>
+#include <string.h>
+
 #include "sstream"
 using namespace std;
 
+#define infinity std::numeric_limits<double>::max()
+
 void parse (bool&, const Json::Value&);
 void parse (int&, const Json::Value&);
+void parse (float&, const Json::Value&);
 void parse (double&, const Json::Value&);
 void parse (string&, const Json::Value&);
 
@@ -71,7 +57,7 @@ void parse_motions (vector<Motion>&, const Json::Value&);
 void parse_handles (vector<Handle*>&, const Json::Value&,
                     const vector<Cloth>&, const vector<Motion>&);
 void parse_obstacles (vector<Obstacle>&, const Json::Value&,
-                      const vector<Motion>&, bool finer = false);
+                      const vector<Motion>&);
 void parse_morphs (vector<Morph>&, const Json::Value&, const vector<Cloth> &);
 void parse (Wind&, const Json::Value&);
 void parse (Magic&, const Json::Value&);
@@ -80,15 +66,12 @@ void load_json (const string &configFilename, Simulation &sim) {
     Json::Value json;
     Json::Reader reader;
     ifstream file(configFilename.c_str());
-    file >> json;
-/*
     bool parsingSuccessful = reader.parse(file, json);
     if(!parsingSuccessful) {
         fprintf(stderr, "Error reading file: %s\n", configFilename.c_str());
         fprintf(stderr, "%s", reader.getFormatedErrorMessages().c_str());
         abort();
     }
-*/
     file.close();
     // Gather general data
     if (!json["frame_time"].empty()) {
@@ -96,9 +79,7 @@ void load_json (const string &configFilename, Simulation &sim) {
         parse(sim.frame_steps, json["frame_steps"], 1);
         sim.step_time = sim.frame_time/sim.frame_steps;
         parse(sim.end_time, json["end_time"], infinity);
-        parse(sim.end_frame, json["end_frame"], 10000.0);
-        if (sim.end_frame > sim.end_time / sim.frame_time)
-            sim.end_frame = sim.end_time / sim.frame_time;
+        parse(sim.end_frame, json["end_frame"], infinity);
     } else if (!json["timestep"].empty()) {
         parse(sim.step_time, json["timestep"]);
         parse(sim.frame_steps, json["save_frames"], 1);
@@ -107,8 +88,6 @@ void load_json (const string &configFilename, Simulation &sim) {
         sim.end_frame = infinity;
     }
     sim.time = 0;
-parse(sim.l0,json["l0"]);
-parse(sim.l1,json["l1"]);
     parse(sim.cloths, json["cloths"]);
     parse_motions(sim.motions, json["motions"]);
     parse_handles(sim.handles, json["handles"], sim.cloths, sim.motions);
@@ -116,18 +95,16 @@ parse(sim.l1,json["l1"]);
     parse_morphs(sim.morphs, json["morphs"], sim.cloths);
     parse(sim.gravity, json["gravity"], Vec3(0));
     parse(sim.wind, json["wind"]);
-    parse(sim.friction, json["friction"], 0.6);
-    parse(sim.obs_friction, json["obs_friction"], 0.3);
+    parse(sim.friction, json["friction"], double(0.6));
+    parse(sim.obs_friction, json["obs_friction"], double(0.3));
     string module_names[] = {"proximity", "physics", "strainlimiting",
                              "collision", "remeshing", "separation",
                              "popfilter", "plasticity"};
     for (int i = 0; i < Simulation::nModules; i++) {
         sim.enabled[i] = true;
         for (int j = 0; j < json["disable"].size(); j++)
-        {
-            if (json["disable"][j].asString() == module_names[i])
+            if (json["disable"][j].asString().compare(module_names[i]))
                 sim.enabled[i] = false;
-        }
     }
     parse(::magic, json["magic"]);
     // disable strain limiting and plasticity if not needed
@@ -135,9 +112,9 @@ parse(sim.l1,json["l1"]);
     for (int c = 0; c < sim.cloths.size(); c++)
         for (int m = 0; m < sim.cloths[c].materials.size(); m++) {
             Cloth::Material *mat = sim.cloths[c].materials[m];
-            if (finite(mat->strain_min) || finite(mat->strain_max))
+            if (std::isfinite(mat->strain_min) || std::isfinite(mat->strain_max))
                 has_strain_limits = true;
-            if (finite(mat->yield_curv))
+            if (std::isfinite(mat->yield_curv))
                 has_plasticity = true;
         }
     if (!has_strain_limits)
@@ -162,9 +139,14 @@ void parse (int &n, const Json::Value &json) {
     n = json.asInt();
 }
 void parse (double &x, const Json::Value &json) {
-    if (!json.isNumeric()) complain(json, "real");
+    if (!json.isNumeric()) complain(json, "double");
     x = json.asDouble();
 }
+void parse (float &x, const Json::Value &json) {
+    if (!json.isNumeric()) complain(json, "float");
+    x = float(json.asDouble());
+}
+
 void parse (string &s, const Json::Value &json) {
     if (!json.isString()) complain(json, "string");
     s = json.asString();
@@ -205,7 +187,7 @@ void parse (Box &box, const Json::Value &json, const Box &box0) {
 // Cloth
 
 void parse (Transformation&, const Json::Value&);
-void parse (Cloth::Material*&, const Json::Value&);
+void parse (Cloth::Material&, const Json::Value&);
 void parse (Cloth::Remeshing&, const Json::Value&);
 
 struct Velocity {Vec3 v, w; Vec3 o;};
@@ -233,7 +215,7 @@ void parse (Cloth &cloth, const Json::Value &json) {
 void parse (Transformation& transform, const Json::Value &json) {
     Vec<4> rot(0);
     parse(transform.translation, json["translate"], Vec3(0));
-    parse(transform.scale, json["scale"], 1.);
+    parse(transform.scale, json["scale"], double(1.));
     parse(rot, json["rotate"], Vec<4>(0));
     transform.rotation = Quaternion::from_axisangle(
         Vec3(rot[1], rot[2], rot[3]), rot[0]*M_PI/180);
@@ -252,39 +234,39 @@ void apply_velocity (Mesh &mesh, const Velocity &vel) {
 
 void load_material_data (Cloth::Material&, const string &filename);
 
-void parse (Cloth::Material *&material, const Json::Value &json) {
+void parse (Cloth::Material *&mat, const Json::Value &json) {
     string filename;
     parse(filename, json["data"]);
-    material = new Cloth::Material;
-    memset(material, 0, sizeof(Cloth::Material));
+
+	Cloth::Material *material = new Cloth::Material;
+	memset(material, 0, sizeof(Cloth::Material));
+	mat = material;
+
     load_material_data(*material, filename);
-    double density_mult, stretching_mult, bending_mult, thicken;
-    parse(density_mult, json["density_mult"], 1.);
-    parse(stretching_mult, json["stretching_mult"], 1.);
-    parse(bending_mult, json["bending_mult"], 1.);
-    parse(thicken, json["thicken"], 1.);
+    REAL density_mult, stretching_mult, bending_mult, thicken;
+	parse(density_mult, json["density_mult"], REAL(1.));
+	parse(stretching_mult, json["stretching_mult"], REAL(1.));
+    parse(bending_mult, json["bending_mult"], REAL(1.));
+    parse(thicken, json["thicken"], REAL(1.));
     density_mult *= thicken;
     stretching_mult *= thicken;
     bending_mult *= thicken;
     material->density *= density_mult;
     for (int i = 0; i < sizeof(material->stretching.s)/sizeof(Vec4); i++)
-        ((Vec4*)&material->stretching.s)[i] *= stretching_mult;
-    for (int i = 0; i < sizeof(material->bending.d)/sizeof(double); i++)
-        ((double*)&material->bending.d)[i] *= bending_mult;
-    parse(material->damping, json["damping"], 0.);
-    parse(Range(material->strain_min, material->strain_max),
-          json["strain_limits"], Vec2(-infinity, infinity));
+        ((Vec4*)&material->stretching.s)[i] *= double(stretching_mult);
+    for (int i = 0; i < sizeof(material->bending.d)/sizeof(REAL); i++)
+        ((REAL*)&material->bending.d)[i] *= bending_mult;
+    parse(material->damping, json["damping"], double(0.));
+    parse(Range(material->strain_min, material->strain_max),json["strain_limits"], Vec2(-infinity, infinity));
     parse(material->yield_curv, json["yield_curv"], infinity);
-    parse(material->weakening, json["weakening"], 0.);
+    parse(material->weakening, json["weakening"], double(0.));
 }
 
 void parse (Cloth::Remeshing &remeshing, const Json::Value &json) {
     parse(remeshing.refine_angle, json["refine_angle"], infinity);
     parse(remeshing.refine_compression, json["refine_compression"], infinity);
     parse(remeshing.refine_velocity, json["refine_velocity"], infinity);
-    parse(Range(remeshing.size_min, remeshing.size_max),
-          json["size"], Vec2(-infinity, infinity));
-    remeshing.tmp_min = remeshing.size_min;
+    parse(Range(remeshing.size_min, remeshing.size_max),json["size"], Vec2(-infinity, infinity));
     parse(remeshing.aspect_min, json["aspect_min"], -infinity);
 }
 
@@ -295,7 +277,7 @@ void parse (Motion&, const Json::Value&);
 void parse_motions (vector<Motion> &motions, const Json::Value &json) {
     if (json.isObject() && !json.isNull()) {
         string filename;
-        double fps;
+        REAL fps;
         Transformation trans;
         parse(filename, json["motfile"]);
         parse(fps, json["fps"]);
@@ -358,6 +340,10 @@ void parse_glue_handle (vector<Handle*> &hans, const Json::Value &json,
                         const vector<Cloth> &cloths,
                         const vector<Motion> &motions);
 
+void parse_attach_handle(vector<Handle*> &hans, const Json::Value &json,
+	const vector<Cloth> &cloths,
+	const vector<Motion> &motions);
+
 void parse_handle (vector<Handle*> &hans, const Json::Value &json,
                    const vector<Cloth> &cloths, const vector<Motion> &motions) {
     string type;
@@ -369,18 +355,21 @@ void parse_handle (vector<Handle*> &hans, const Json::Value &json,
         parse_circle_handle(hans, json, cloths, motions);
     else if (type == "glue")
         parse_glue_handle(hans, json, cloths, motions);
-    else {
+	else if (type == "attach")
+		parse_attach_handle(hans, json, cloths, motions);
+	else {
         cout << "Unknown handle type " << type << endl;
         abort();
     }
-    double start_time, end_time, fade_time;
-    parse(start_time, json["start_time"], 0.);
-    parse(end_time, json["end_time"], infinity);
-    parse(fade_time, json["fade_time"], 0.);
+    REAL start_time, end_time, fade_time;
+    parse(start_time, json["start_time"], float(0.));
+    parse(end_time, json["end_time"], float(infinity));
+    parse(fade_time, json["fade_time"], float(0.));
     for (int h = nhans; h < hans.size(); h++) {
         hans[h]->start_time = start_time;
         hans[h]->end_time = end_time;
         hans[h]->fade_time = fade_time;
+		hans[h]->backup(cloths);
     }
 }
 
@@ -454,29 +443,48 @@ void parse_glue_handle (vector<Handle*> &hans, const Json::Value &json,
     hans.push_back(han);
 }
 
-void parse_obstacle (Obstacle&, const Json::Value&, const vector<Motion>&);
+void parse_attach_handle(vector<Handle*> &hans, const Json::Value &json,
+	const vector<Cloth> &cloths,
+	const vector<Motion> &motions) {
+	AttachHandle *han = new AttachHandle;
+	int c, o;
+	vector<int> ns;
+	parse(c, json["cloth"], 0);
+	parse(o, json["obstacle"], 0);
+	parse(ns, json["nodes"]);
+	if (ns.size() != 2) {
+		cout << "Must attach exactly two nodes together" << endl;
+		abort();
+	}
+
+	han->cid = c;
+	han->oid = o;
+	han->id1 = ns[0];
+	han->id2 = ns[1];
+	han->init = false;
+	hans.push_back(han);
+}
+
+void parse_obstacle(Obstacle&, const Json::Value&, const vector<Motion>&);
 
 void parse_obstacles (vector<Obstacle> &obstacles, const Json::Value &json,
-                      const vector<Motion> &motions, bool finer) {
+                      const vector<Motion> &motions) {
     if (json.isString()) {
         string fmt;
         parse(fmt, json);
-        for (int i = 0; true; i++) {
-            string filename = stringf(fmt, i);
-            if (finer)
-                filename = filename + "_fine.obj";
-            else
-                filename = filename + "_fine.obj";//bug: not doing collision response after refinement.
-            if (!fstream(filename.c_str(), ios::in))
-                break;
-            Obstacle obs;
-            load_obj(obs.base_mesh, filename);
-            obs.transform_spline = (i<motions.size()) ? &motions[i] : NULL;
-            obs.start_time = 0;
-            obs.end_time = infinity;
-            obs.get_mesh(0,0,0,1);//!
-            obstacles.push_back(obs);
+        char buffer[512];
+        sprintf(buffer, fmt.c_str());
+        string filename(buffer);
+        if (!fstream(filename.c_str(), ios::in)){
+            return;
         }
+        Obstacle obs;
+        load_obj(obs.base_mesh, filename);
+        obs.transform_spline = (motions.size() > 0) ? &motions[0] : NULL;
+        obs.start_time = 0;
+        obs.end_time = infinity;
+        obs.get_mesh(0);
+        obstacles.push_back(obs);
     } else {
         obstacles.resize(json.size());
         for (int j = 0; j < json.size(); j++)
@@ -494,13 +502,10 @@ void parse_obstacle (Obstacle &obstacle, const Json::Value &json,
     apply_transformation(obstacle.base_mesh, transform);
     int m;
     parse(m, json["motion"], -1);
-    parse(obstacle.slow, json["slow"], 1);
-    parse(obstacle.motion_obj_file, json["motion_obj_file"], string(""));
-    parse(obstacle.motion_type, json["motion_type"], 0);
     obstacle.transform_spline = (m != -1) ? &motions[m] : NULL;
-    parse(obstacle.start_time, json["start_time"], 0.);
+    parse(obstacle.start_time, json["start_time"], double(0.));
     parse(obstacle.end_time, json["end_time"], infinity);
-    obstacle.get_mesh(0,0,0,1);//!
+    obstacle.get_mesh(0);
 }
 
 void parse_morph (Morph&, const Json::Value&, const vector<Cloth>&);
@@ -529,12 +534,12 @@ void parse_morph (Morph &morph, const Json::Value &json,
     morph.log_stiffness.points.resize(nk);
     for (int k = 0; k < nk; k++) {
         const Json::Value &j = json["spline"][k];
-        double t; parse(t, j["time"]);
+        REAL t; parse(t, j["time"]);
         morph.weights.points[k].t = morph.log_stiffness.points[k].t = t;
         int m; parse(m, j["target"]);
         morph.weights.points[k].x.assign(morph.targets.size(), 0);
         morph.weights.points[k].x[m] = 1;
-        double s; parse(s, j["stiffness"]);
+        REAL s; parse(s, j["stiffness"]);
         morph.log_stiffness.points[k].x = log(s);
     }
     for (int k = 0; k < nk; k++) {
@@ -544,9 +549,9 @@ void parse_morph (Morph &morph, const Json::Value &json,
 }
 
 void parse (Wind &wind, const Json::Value &json) {
-    parse(wind.density, json["density"], 1.);
+    parse(wind.density, json["density"], double(1.));
     parse(wind.velocity, json["velocity"], Vec3(0));
-    parse(wind.drag, json["drag"], 0.);
+    parse(wind.drag, json["drag"], double(0.));
 }
 
 void parse (Magic &magic, const Json::Value &json) {
@@ -556,11 +561,20 @@ void parse (Magic &magic, const Json::Value &json) {
     PARSE_MAGIC(collision_stiffness);
     PARSE_MAGIC(repulsion_thickness);
     parse(magic.projection_thickness, json["projection_thickness"],
-          0.1*magic.repulsion_thickness);
+          0.1f*magic.repulsion_thickness);
     PARSE_MAGIC(edge_flip_threshold);
     PARSE_MAGIC(rib_stiffening);
     PARSE_MAGIC(combine_tensors);
     PARSE_MAGIC(preserve_creases);
+	PARSE_MAGIC(tm_load_ob);
+	PARSE_MAGIC(tm_with_cd);
+	PARSE_MAGIC(tm_with_ti);
+	PARSE_MAGIC(tm_jacobi_preconditioner);
+	PARSE_MAGIC(tm_use_gpu);
+	PARSE_MAGIC(tm_output_file);
+	PARSE_MAGIC(tm_iterations);
+	PARSE_MAGIC(tm_self_cd);
+	PARSE_MAGIC(tm_strain_limiting);
 #undef PARSE_MAGIC
 }
 

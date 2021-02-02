@@ -30,6 +30,7 @@
 #include "displaytesting.hpp"
 #include "misc.hpp"
 #include "io.hpp"
+#include "real.hpp"
 #include "runphysics.hpp"
 #include <cstdlib>
 using namespace std;
@@ -37,9 +38,25 @@ using namespace std;
 // implement this anywhere in any .cpp file
 extern void debug (const vector<string> &args);
 
+extern void init_resume(char *path, int st);
+extern void init_cuda(int argc, char **argv);
+
+void initModel(int argc, char **argv, char *path, int st)
+{
+	init_cuda(argc, argv);
+
+    int x;
+    cudaGetDeviceCount(&x);
+    std::cout << "Using " << x << " devices" << std::endl;
+}
+
+int stFrame = 0;
+bool USE_GPU = true;
+
 int main (int argc, char **argv) {
     srand(19941126);
     MPI_Init(&argc, &argv);
+    initModel(argc, argv, argv[1], stFrame);
     struct Action {
         string name;
         void (*run) (const vector<string> &args);
@@ -78,3 +95,4 @@ int main (int argc, char **argv) {
     MPI_Finalize();
     exit(EXIT_FAILURE);
 }
+

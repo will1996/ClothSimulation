@@ -12,13 +12,13 @@ NVFLAGS_DEBUG  := -g -G -m64 -gencode arch=compute_75,code=compute_75 -gencode a
 
 NVFLAGS_RELEASE  := -m64 -gencode arch=compute_75,code=compute_75 -gencode arch=compute_61,code=compute_61 -gencode arch=compute_35,code=compute_35
 
-CXXFLAGS := -Idependencies/include -I/usr/local/include -Wno-deprecated-declarations -std=c++11
+CXXFLAGS := -Idependencies/include -I/usr/local/include -I/opt/common/cuda/cuda-10.1.243/samples/common/inc/  -Wno-deprecated-declarations -std=c++11
 ifdef NO_OPENGL
 	CXXFLAGS := $(CXXFLAGS) -DNO_OPENGL
 endif
 
 CXXFLAGS_DEBUG := -Wall -g -Wno-sign-compare
-CXXFLAGS_RELEASE := -O3 -Wreturn-type -openmp  -g
+CXXFLAGS_RELEASE := -O3 -Wreturn-type -openmp  -g 
 LDFLAGS := -L/usr/local/opt/openblas/lib -Ldependencies/lib -L/opt/local/lib -L/usr/local/lib -L/lib64 -L/usr/local/lib/gcc/6 -L/usr/local/gfortran/lib -lpng -lz -ltaucs -llapack -lblas -lboost_filesystem-mt -lboost_thread-mt -ljson -lboost_system -lgomp -lalglib
 	LDFLAGS := $(LDFLAGS) -lglut 
 
@@ -35,7 +35,9 @@ OBJ := \
 	dde.o \
 	dynamicremesh.o \
 	geometry.o \
+	gpu.o \
 	handle.o \
+	init.o\
 	io.o \
 	lbfgs.o \
 	lsnewton.o \
@@ -55,6 +57,7 @@ OBJ := \
 	remesh.o \
 	refinemesh.o\
 	runphysics.o \
+	save.o \
 	separate.o \
 	separateobs.o \
 	simulation.o \
@@ -68,7 +71,11 @@ OBJ := \
 	util.o \
 	vectors.o \
 	dosimulation.o \
-	gpusimulation.o 
+	gpusimulation.o \
+	SH-combine.o\
+	SpatialHashHelper.o\
+	cudaCG.o\
+	CCSManager.o
 
 
 .PHONY: all debug release tags clean
@@ -90,13 +97,23 @@ bin/arcsim: $(addprefix build/release/,$(OBJ))
 build/debug/%.o: src/%.cpp 
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(CXXFLAGS_DEBUG) $< -o $@
 
-
 build/release/%.o: src/%.cpp
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $(CXXFLAGS_RELEASE) $< -o $@
 
+build/release/%.o: interface/%.cpp
+	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS)  $(CXXFLAGS_RELEASE) $< -o $@
 
 build/release/gpusimulation.o: src/cuda/gpusimulation.cu
 	$(NVCXX) -c $(NVFLAGS) $(NVLIBS) $(NVFLAGS_DEBUG)  src/cuda/gpusimulation.cu -o build/release/gpusimulation.o
+
+build/release/SH-combine.o: src/cuda/spatial-hashing/SH-combine.cu
+	$(NVCXX) -c $(NVFLAGS) $(NVLIBS) $(NVFLAGS_DEBUG)  src/cuda/spatial-hashing/SH-combine.cu -o build/release/SH-combine.o
+
+build/release/SpatialHashHelper.o: src/cuda/spatial-hashing/SpatialHashHelper.cu
+	$(NVCXX) -c $(NVFLAGS) $(NVLIBS) $(NVFLAGS_DEBUG)  src/cuda/spatial-hashing/SpatialHashHelper.cu -o build/release/SpatialHashHelper.o
+
+build/release/cudaCG.o: src/cuda/cudaCG.cpp
+	$(NVCXX) -c $(NVFLAGS) $(NVLIBS) $(NVFLAGS_DEBUG)  src/cuda/cudaCG.cpp -o build/release/cudaCG.o
 
 
 # Nicked from http://www.gnu.org/software/make/manual/make.html#Automatic-Prerequisites

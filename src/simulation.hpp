@@ -69,6 +69,10 @@ struct Simulation {
     Timer timers[nModules];
     // handy pointers
     std::vector<Mesh*> cloth_meshes, obstacle_meshes;
+
+    //restart
+    bool is_in_gpu;
+    void reset();
 };
 
 void prepare (Simulation &sim);

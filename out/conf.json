@@ -1,9 +1,11 @@
 {
 "l0":1,
 "l1":2,
-    "frame_time": 0.04,
-    "frame_steps": 8,
-    "end_time": 20,
+    "frame_time": 0.02,
+    "frame_steps": 100,
+    "end_time": 100,
+    "end_frame": 100,
+    "end_step": 100,
     "cloths": [{
         "mesh": "meshes/dress.obj",//dress4
         //"transform": {"rotate": [90, 1, 0, 0]},

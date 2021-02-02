@@ -29,6 +29,7 @@
 
 #include "dde.hpp"
 #include "mesh.hpp"
+#include "real.hpp"
 
 struct Cloth {
     Mesh mesh;

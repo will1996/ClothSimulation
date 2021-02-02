@@ -29,9 +29,12 @@
 
 #include "cloth.hpp"
 #include "constraint.hpp"
+#include "real.hpp"
 
+void collision_response_gpu(REAL dt, REAL mu, REAL mu_obs, REAL mrt, REAL mcs);
 void collision_response (std::vector<Mesh*> &meshes,
                          const std::vector<Constraint*> &cons,
                          const std::vector<Mesh*> &obs_meshes, bool verbose=false);
+
 
 #endif

@@ -144,84 +144,123 @@ void compute_masses 30,1341
 
 cloth.hpp,1346
 #define CLOTH_HPP28,1316
-struct Cloth 33,1375
-    Mesh mesh;Cloth::mesh34,1390
-    struct Material Cloth::Material35,1405
-        double density;Cloth::Material::density36,1427
-        StretchingSamples stretching;Cloth::Material::stretching37,1467
-        BendingData bending;Cloth::Material::bending38,1505
-        double damping;Cloth::Material::damping39,1534
-        double strain_min,Cloth::Material::strain_min40,1604
-        double strain_min, strain_max;Cloth::Material::strain_max40,1604
-        double yield_curv,Cloth::Material::yield_curv41,1660
-        double yield_curv, weakening;Cloth::Material::weakening41,1660
-    std::vector<Material*> materials;Cloth::materials43,1730
-    struct Remeshing Cloth::Remeshing44,1768
-        double refine_angle,Cloth::Remeshing::refine_angle45,1791
-        double refine_angle, refine_compression,Cloth::Remeshing::refine_compression45,1791
-        double refine_angle, refine_compression, refine_velocity;Cloth::Remeshing::refine_velocity45,1791
-        double size_min,Cloth::Remeshing::size_min46,1857
-        double size_min, size_max,Cloth::Remeshing::size_max46,1857
-        double size_min, size_max, tmp_min;Cloth::Remeshing::tmp_min46,1857
-        double aspect_min;Cloth::Remeshing::aspect_min47,1916
-    } remeshing;Cloth::remeshing48,1967
+struct Cloth 34,1395
+    Mesh mesh;Cloth::mesh35,1410
+    struct Material Cloth::Material36,1425
+        double density;Cloth::Material::density37,1447
+        StretchingSamples stretching;Cloth::Material::stretching38,1487
+        BendingData bending;Cloth::Material::bending39,1525
+        double damping;Cloth::Material::damping40,1554
+        double strain_min,Cloth::Material::strain_min41,1624
+        double strain_min, strain_max;Cloth::Material::strain_max41,1624
+        double yield_curv,Cloth::Material::yield_curv42,1680
+        double yield_curv, weakening;Cloth::Material::weakening42,1680
+    std::vector<Material*> materials;Cloth::materials44,1750
+    struct Remeshing Cloth::Remeshing45,1788
+        double refine_angle,Cloth::Remeshing::refine_angle46,1811
+        double refine_angle, refine_compression,Cloth::Remeshing::refine_compression46,1811
+        double refine_angle, refine_compression, refine_velocity;Cloth::Remeshing::refine_velocity46,1811
+        double size_min,Cloth::Remeshing::size_min47,1877
+        double size_min, size_max,Cloth::Remeshing::size_max47,1877
+        double size_min, size_max, tmp_min;Cloth::Remeshing::tmp_min47,1877
+        double aspect_min;Cloth::Remeshing::aspect_min48,1936
+    } remeshing;Cloth::remeshing49,1987
 
-collision.cpp,2060
-static const int max_iter 41,1569
-static const double &thickness thickness42,1602
-static double obs_mass;44,1666
-static bool deform_obstacles;45,1690
-static vector<Vec3> xold;47,1721
-static vector<Vec3> xold_obs;48,1747
-double get_mass 50,1778
-pair<bool,int> find_in_meshes 54,1970
-struct Impact 62,2190
-    enum Type Impact::Type63,2206
-    enum Type {VF,Impact::Type::VF63,2206
-    enum Type {VF, EE}Impact::Type::EE63,2206
-    enum Type {VF, EE} type;Impact::type63,2206
-    double t;Impact::t64,2235
-    Node *nodes[Impact::nodes65,2249
-    double w[Impact::w66,2269
-    Vec3 n;Impact::n67,2286
-    Impact Impact::Impact68,2298
-    Impact Impact::Impact69,2315
-struct ImpactZone 78,2558
-    vector<Node*> nodes;ImpactZone::nodes79,2578
-    vector<Impact> impacts;ImpactZone::impacts80,2603
-    bool active;ImpactZone::active81,2631
-void collision_response 102,3408
-void update_active 165,5845
-static int nthreads 189,6766
-static vector<Impact> *impacts impacts190,6791
-vector<Impact> find_impacts 194,6895
-void find_face_impacts 212,7583
-bool vf_collision_test 230,8327
-bool ee_collision_test 242,8795
-bool collision_test 256,9374
-Vec3 pos 299,11063
-int solve_cubic 308,11331
-double newtons_method 332,12195
-bool operator< 355,12863
-vector<Impact> independent_impacts 361,13027
-bool conflict 377,13518
-void add_impacts 390,14052
-ImpactZone *find_or_create_zone find_or_create_zone406,14722
-void merge_zones 416,15050
-struct NormalOpt:NormalOpt428,15339
-    ImpactZone *zone;NormalOpt::zone429,15375
-    NormalOpt NormalOpt::NormalOpt430,15397
-    NormalOpt NormalOpt::NormalOpt431,15445
-double inv_mget_mass(NormalOpt::inv_mget_mass435,15572
-void apply_inelastic_projection 452,16183
-void NormalOpt::initialize 459,16394
-void NormalOpt::precompute 464,16538
-double NormalOpt::objective 471,16731
-void NormalOpt::obj_grad 481,17010
-double NormalOpt::constraint 489,17275
-void NormalOpt::con_grad 498,17545
-void NormalOpt::finalize 508,17881
-const Vec3 &get_xold get_xold512,17954
+collision.cpp,3474
+static const int max_iter 15,275
+static const REAL &thickness thickness16,308
+static REAL obs_mass;18,370
+static bool deform_obstacles;19,392
+static vector<Vec3> xold;21,423
+static vector<Vec3> xold_obs;22,449
+double get_mass(26,574
+	I_NULL ::I_NULL29,671
+	I_VF ::I_VF30,685
+	I_EE ::I_EE31,696
+} ImpactType;32,706
+struct tmImpactInfo 35,722
+	uint _nodes[tmImpactInfo::_nodes36,744
+	bool _frees[tmImpactInfo::_frees37,761
+	REAL _w[tmImpactInfo::_w38,778
+	ImpactType _type;tmImpactInfo::_type40,792
+	REAL _t;tmImpactInfo::_t41,811
+	Vec3 _n;tmImpactInfo::_n42,821
+	void print(tmImpactInfo::print44,832
+struct g_impactNode 55,1111
+	uint _n;g_impactNode::_n56,1133
+	bool _f;g_impactNode::_f57,1143
+	Vec3 _ox;g_impactNode::_ox58,1153
+	Vec3 _x;g_impactNode::_x59,1164
+	REAL _m;g_impactNode::_m60,1174
+	g_impactNode(g_impactNode::g_impactNode62,1185
+	g_impactNode(g_impactNode::g_impactNode66,1218
+vector<g_impactNode> *currentNodes currentNodes72,1277
+struct g_impact 74,1321
+	uint _nodes[g_impact::_nodes75,1339
+	bool _frees[g_impact::_frees76,1356
+	REAL _w[g_impact::_w77,1373
+	ImpactType _type;g_impact::_type79,1387
+	REAL _t;g_impact::_t80,1406
+	Vec3 _n;g_impact::_n81,1416
+	g_impact(g_impact::g_impact83,1427
+	g_impact(g_impact::g_impact93,1644
+	void print(g_impact::print100,1898
+struct g_impactZone 111,2177
+	vector<uint> _nodes;g_impactZone::_nodes112,2199
+	vector<bool>  _frees;g_impactZone::_frees113,2221
+	vector<g_impact> _impacts;g_impactZone::_impacts114,2244
+	bool _active;g_impactZone::_active115,2272
+	void print(g_impactZone::print117,2288
+void push_node_data(137,3024
+void push_node_vel(148,3272
+void collision_response_gpu(161,3543
+pair<bool,int> find_in_meshes 252,5673
+struct Impact 260,5893
+    enum Type Impact::Type261,5909
+    enum Type {VF,Impact::Type::VF261,5909
+    enum Type {VF, EE}Impact::Type::EE261,5909
+    enum Type {VF, EE} type;Impact::type261,5909
+    double t;Impact::t262,5938
+    Node *nodes[Impact::nodes263,5952
+    double w[Impact::w264,5972
+    Vec3 n;Impact::n265,5989
+    Impact Impact::Impact266,6001
+    Impact Impact::Impact267,6018
+struct ImpactZone 276,6261
+    vector<Node*> nodes;ImpactZone::nodes277,6281
+    vector<Impact> impacts;ImpactZone::impacts278,6306
+    bool active;ImpactZone::active279,6334
+void collision_response 300,7111
+static int nthreads 305,7281
+bool operator < operator <308,7330
+bool operator == operator ==326,7708
+bool operator < operator <331,7826
+vector<g_impact> independent_impacts(343,8050
+bool is_in(359,8478
+bool conflict(368,8632
+void add_impacts(382,9197
+bool is_in(406,9966
+g_impactZone *find_or_create_zone(find_or_create_zone418,10215
+void merge_zones(431,10543
+void merge_zones(438,10728
+inline REAL get_mass(451,11026
+inline Vec3 get_x(461,11207
+inline Vec3 get_x0(468,11348
+inline Vec3 get_xold(475,11491
+inline void set_x(482,11636
+struct gNormalOpt 492,11810
+	g_impactZone *_zone;gNormalOpt::_zone493,11848
+	REAL _inv_m;gNormalOpt::_inv_m494,11870
+	gNormalOpt(gNormalOpt::gNormalOpt495,11884
+	gNormalOpt(gNormalOpt::gNormalOpt496,11944
+void apply_inelastic_projection(512,12570
+void gNormalOpt::initialize(521,12717
+void gNormalOpt::precompute(527,12883
+double gNormalOpt::objective(534,13093
+void gNormalOpt::obj_grad(545,13375
+double gNormalOpt::constraint(554,13657
+gNormalOpt::con_grad(569,13989
+void gNormalOpt::finalize(580,14292
 
 collision.hpp,30
 #define COLLISION_HPP28,1320
@@ -256,56 +295,59 @@ struct AccelStruct 35,1434
 typedef void (*BVHCallback)BVHCallback48,1772
 template <typename Primitive> bool is_free 73,3058
 
-conf.cpp,1434
-template <int n> void parse 48,1771
-template <typename T> void parse 55,1983
-template <typename T> void parse 62,2138
-void load_json 79,2876
-void complain 151,5831
-void parse 156,5994
-void parse 160,6118
-void parse 164,6244
-void parse 168,6372
-struct Range 173,6502
-    double &min,Range::min174,6517
-    double &min, &max;Range::max174,6517
-    Range Range::Range175,6540
-void parse 178,6604
-struct Box 189,6874
-    Vec2 umin,Box::umin190,6887
-    Vec2 umin, umax;Box::umax190,6887
-    Box Box::Box191,6908
-    Box Box::Box192,6922
-void parse 195,6998
-struct Velocity 211,7390
-struct Velocity {Vec3 v,Velocity::v211,7390
-struct Velocity {Vec3 v, w;Velocity::w211,7390
-struct Velocity {Vec3 v, w; Vec3 o;Velocity::o211,7390
-void parse 215,7530
-void parse 233,8172
-void parse 242,8521
-void apply_velocity 248,8728
-void parse 255,8979
-void parse 281,10192
-void parse_motions 295,10759
-void parse 317,11557
-void parse 324,11814
-void parse_handles 343,12382
-void parse_handle 361,13185
-void parse_node_handle 387,14132
-void parse_circle_handle 421,15233
-void parse_glue_handle 439,15879
-void parse_obstacles 459,16541
-void parse_obstacle 487,17583
-void parse_morphs 509,18503
-void parse_morph 516,18746
-void parse 546,19861
-void parse 552,20054
-#define PARSE_MAGIC(553,20107
-#undef PARSE_MAGIC564,20579
-void load_material_data 572,20721
-void parse 588,21300
-void parse 598,21619
+conf.cpp,1512
+#define infinity 24,373
+template <int n> void parse 34,697
+template <typename T> void parse 41,909
+template <typename T> void parse 48,1064
+void load_json 65,1782
+void complain 128,4567
+void parse 133,4730
+void parse 137,4854
+void parse 141,4980
+void parse 145,5110
+void parse 150,5246
+struct Range 155,5376
+    double &min,Range::min156,5391
+    double &min, &max;Range::max156,5391
+    Range Range::Range157,5414
+void parse 160,5478
+struct Box 171,5748
+    Vec2 umin,Box::umin172,5761
+    Vec2 umin, umax;Box::umax172,5761
+    Box Box::Box173,5782
+    Box Box::Box174,5796
+void parse 177,5872
+struct Velocity 193,6263
+struct Velocity {Vec3 v,Velocity::v193,6263
+struct Velocity {Vec3 v, w;Velocity::w193,6263
+struct Velocity {Vec3 v, w; Vec3 o;Velocity::o193,6263
+void parse 197,6403
+void parse 215,7045
+void parse 224,7402
+void apply_velocity 230,7609
+void parse 237,7860
+void parse 265,9123
+void parse_motions 277,9635
+void parse 299,10431
+void parse 306,10688
+void parse_handles 325,11256
+void parse_handle 347,12196
+void parse_node_handle 376,13266
+void parse_circle_handle 410,14367
+void parse_glue_handle 428,15013
+void parse_attach_handle(446,15598
+void parse_obstacles 470,16177
+void parse_obstacle 495,16984
+void parse_morphs 514,17729
+void parse_morph 521,17972
+void parse 551,19083
+void parse 557,19292
+#define PARSE_MAGIC(558,19345
+#undef PARSE_MAGIC578,20081
+void load_material_data 586,20223
+void parse 602,20802
+void parse 612,21121
 
 conf.hpp,25
 #define CONF_HPP28,1315
@@ -369,13 +411,13 @@ double bending_stiffness 126,4806
 
 dde.hpp,319
 #define DDE_HPP28,1314
-typedef Vec<4> Vec4;33,1374
-struct StretchingData 35,1396
-struct StretchingData {Vec4 d[StretchingData::d35,1396
-struct StretchingSamples 37,1436
-struct StretchingSamples {Vec4 s[StretchingSamples::s37,1436
-struct BendingData 39,1485
-struct BendingData {double d[BendingData::d39,1485
+typedef Vec<4> Vec4;34,1394
+struct StretchingData 36,1416
+struct StretchingData {Vec4 d[StretchingData::d36,1416
+struct StretchingSamples 38,1456
+struct StretchingSamples {Vec4 s[StretchingSamples::s38,1456
+struct BendingData 40,1505
+struct BendingData {double d[BendingData::d40,1505
 
 display.cpp,1927
 static vector<Mesh*> &meshes meshes42,1528
@@ -495,11 +537,11 @@ int M 26,532
 int myrank,27,551
 int myrank, largeStep;27,551
 vector<Mesh> tmp_mesh;28,574
-void checkDx(41,1201
-void initialize(51,1524
-int determinePartition(134,4606
-void do_static_step(154,4997
-void do_simulation(191,6690
+void checkDx(43,1250
+void initialize(53,1573
+int determinePartition(136,4649
+void do_static_step(156,5040
+void do_simulation(198,6849
 
 dosimulation.hpp,69
 #define DO_SIMULATION_HPP3,27
@@ -574,6 +616,14 @@ bool can_collapse 556,18636
 dynamicremesh.hpp,34
 #define DYNAMICREMESH_HPP28,1324
 
+eigen.cpp,215
+typedef SparseMatrix<REAL> EigenSpMat;10,144
+typedef Triplet<REAL> T;11,184
+typedef VectorXd EigenVec;14,231
+typedef VectorXf EigenVec;16,266
+sparse_to_eigen(20,310
+std::vector<REAL> eigen_linear_solve(35,695
+
 geometry.cpp,683
 double signed_vf_distance 32,1364
 double signed_ee_distance 52,1986
@@ -600,59 +650,166 @@ enum Space 54,2248
 enum Space {PS,Space::PS54,2248
 enum Space {PS, WS}Space::WS54,2248
 
-handle.cpp,289
+gpu.cpp,3358
+#define ONE_PASS_CD11,197
+#define FORCEINLINE 13,232
+std::vector<Vec3> totalVert;16,267
+static int tidx;17,296
+void check_step(31,878
+void update_mesh_gpu(58,1987
+void push_node_gpu(112,2982
+void pop_mesh_gpu(131,3291
+void push_mesh_gpu(146,3516
+void push_node_gpu(312,7040
+void push_cloth_gpu(318,7149
+void push_obstacle_gpu(324,7266
+void update_obstacle_gpu(332,7448
+void push_material_gpu(339,7653
+void pop_cloth_gpu(368,8229
+void push_nodes_gpu(398,8852
+bvh *bvhC bvhC408,9075
+void visualize_cones(413,9155
+void visualize_cones(433,9536
+void visualize_cones(438,9595
+void push_data_gpu(445,9632
+void update_obstacles_gpu(483,10573
+void update_obstacles(492,10748
+int getNodeID(537,11934
+void init_handles(556,12356
+void step_mesh(598,13403
+void collision_step_gpu(603,13540
+void load_animation(619,14022
+void advance_step_gpu(658,14975
+class vec3f 745,16939
+			double x,vec3f::x749,16981
+			double x, y,vec3f::y749,16981
+			double x, y, z;vec3f::z749,16981
+			double v[vec3f::v752,17016
+	FORCEINLINE vec3f(vec3f::vec3f757,17050
+	FORCEINLINE vec3f(vec3f::vec3f762,17101
+	FORCEINLINE vec3f(vec3f::vec3f769,17176
+	FORCEINLINE vec3f(vec3f::vec3f776,17255
+	FORCEINLINE double operator [] vec3f::operator []783,17356
+	FORCEINLINE double &operator [] vec3f::operator []784,17419
+	FORCEINLINE vec3f &operator += vec3f::operator +=787,17493
+	FORCEINLINE vec3f &operator -= vec3f::operator -=794,17600
+	FORCEINLINE vec3f &operator *= vec3f::operator *=801,17707
+	FORCEINLINE vec3f &operator /= vec3f::operator /=808,17802
+	FORCEINLINE void negate(vec3f::negate815,17897
+	FORCEINLINE vec3f operator - vec3f::operator -821,17960
+	FORCEINLINE vec3f operator+ vec3f::operator+825,18033
+	FORCEINLINE vec3f operator- vec3f::operator-830,18135
+	FORCEINLINE vec3f operator *(vec3f::operator *835,18237
+	FORCEINLINE vec3f operator /(vec3f::operator /840,18321
+	FORCEINLINE const vec3f cross(vec3f::cross846,18429
+	FORCEINLINE double dot(vec3f::dot851,18564
+	FORCEINLINE void normalize(vec3f::normalize855,18656
+	FORCEINLINE double length(vec3f::length866,18842
+	FORCEINLINE vec3f getUnit(vec3f::getUnit870,18923
+	FORCEINLINE bool isUnit(vec3f::isUnit874,18993
+	FORCEINLINE double infinityNorm(vec3f::infinityNorm879,19093
+	FORCEINLINE vec3f & set_value(vec3f::set_value884,19189
+	FORCEINLINE bool operator == vec3f::operator ==889,19321
+	FORCEINLINE bool equal_abs(vec3f::equal_abs893,19411
+	FORCEINLINE double squareLength(vec3f::squareLength897,19526
+	static vec3f zero(vec3f::zero901,19599
+	static vec3f axis(vec3f::axis906,19710
+	static vec3f xAxis(vec3f::xAxis923,19952
+	static vec3f yAxis(vec3f::yAxis925,20058
+	static vec3f zAxis(vec3f::zAxis927,20164
+class tri3f 932,20237
+	unsigned int _ids[tri3f::_ids934,20259
+	FORCEINLINE tri3f(tri3f::tri3f936,20283
+	FORCEINLINE tri3f(tri3f::tri3f940,20346
+	FORCEINLINE void set(tri3f::set944,20447
+	FORCEINLINE unsigned int id(tri3f::id950,20580
+	FORCEINLINE unsigned int id0(tri3f::id0951,20636
+	FORCEINLINE unsigned int id1(tri3f::id1952,20688
+	FORCEINLINE unsigned int id2(tri3f::id2953,20740
+	FORCEINLINE bool operator == tri3f::operator ==955,20793
+bool compressobjfile(963,20977
+void mergeVtxs(1088,23870
+void moveMesh(1153,25407
+LineTriangleIntersect(1166,25609
+bool bodyColliding(1199,26221
+
+handle.cpp,350
 static Vec3 directions[directions31,1363
 Transformation normalize 36,1571
 vector<Constraint*> NodeHandle::get_constraints 42,1711
-vector<Constraint*> CircleHandle::get_constraints 57,2240
-vector<Constraint*> GlueHandle::get_constraints 82,3106
-void add_position_constraints 98,3549
+vector<Constraint*> AttachHandle::get_constraints(60,2293
+vector<Constraint*> CircleHandle::get_constraints 80,2762
+vector<Constraint*> GlueHandle::get_constraints 105,3636
+void add_position_constraints 121,4079
 
-handle.hpp,1287
-#define HANDLE_HPP28,1317
-struct Handle 34,1402
-    double start_time,Handle::start_time35,1418
-    double start_time, end_time,Handle::end_time35,1418
-    double start_time, end_time, fade_time;Handle::fade_time35,1418
-    virtual ~Handle Handle::~Handle36,1462
-    bool active Handle::active39,1607
-    double strength Handle::strength40,1677
-struct NodeHandle:NodeHandle48,1907
-    Node *node;NodeHandle::node49,1942
-    const Motion *motion;NodeHandle::motion50,1958
-    bool activated;NodeHandle::activated51,1984
-    Vec3 x0;NodeHandle::x052,2004
-    NodeHandle NodeHandle::NodeHandle53,2017
-    std::vector<Node*> get_nodes NodeHandle::get_nodes55,2113
-struct CircleHandle:CircleHandle58,2191
-    Mesh *mesh;CircleHandle::mesh59,2228
-    int label;CircleHandle::label60,2244
-    const Motion *motion;CircleHandle::motion61,2259
-    double c;CircleHandle::c62,2285
-    Vec2 u;CircleHandle::u63,2316
-    Vec3 xc,CircleHandle::xc64,2328
-    Vec3 xc, dx0,CircleHandle::dx064,2328
-    Vec3 xc, dx0, dx1;CircleHandle::dx164,2328
-    std::vector<Node*> get_nodes CircleHandle::get_nodes66,2408
-struct GlueHandle:GlueHandle69,2479
-    Node* nodes[GlueHandle::nodes70,2514
-    std::vector<Node*> get_nodes GlueHandle::get_nodes72,2591
+handle.hpp,1972
+struct Handle 10,141
+	REAL start_time,Handle::start_time11,157
+	REAL start_time, end_time,Handle::end_time11,157
+	REAL start_time, end_time, fade_time;Handle::fade_time11,157
+	virtual ~Handle(Handle::~Handle12,196
+	bool active(Handle::active15,329
+	REAL strength(Handle::strength16,395
+struct NodeHandle 27,682
+	Node *node;NodeHandle::node28,718
+	const Motion *motion;NodeHandle::motion29,731
+	bool activated;NodeHandle::activated30,754
+	Vec3 x0;NodeHandle::x031,771
+	NodeHandle(NodeHandle::NodeHandle32,781
+	std::vector<Node*> get_nodes(NodeHandle::get_nodes34,870
+	int index;NodeHandle::index36,943
+	int mid;NodeHandle::mid37,955
+	void backup(NodeHandle::backup38,965
+	void resume(NodeHandle::resume52,1248
+struct CircleHandle 57,1325
+	Mesh *mesh;CircleHandle::mesh58,1363
+	int label;CircleHandle::label59,1376
+	const Motion *motion;CircleHandle::motion60,1388
+	REAL c;CircleHandle::c61,1411
+	Vec2 u;CircleHandle::u62,1437
+	Vec3 xc,CircleHandle::xc63,1446
+	Vec3 xc, dx0,CircleHandle::dx063,1446
+	Vec3 xc, dx0, dx1;CircleHandle::dx163,1446
+	std::vector<Node*> get_nodes(CircleHandle::get_nodes65,1519
+	void backup(CircleHandle::backup67,1585
+	void resume(CircleHandle::resume68,1625
+struct GlueHandle 73,1680
+	Node* nodes[GlueHandle::nodes74,1716
+	std::vector<Node*> get_nodes(GlueHandle::get_nodes76,1786
+	int indices[GlueHandle::indices83,1914
+	int mid[GlueHandle::mid84,1931
+	void backup(GlueHandle::backup85,1944
+	void resume(GlueHandle::resume114,2527
+struct AttachHandle 120,2664
+	int id1,AttachHandle::id1121,2702
+	int id1, id2,AttachHandle::id2121,2702
+	int id1, id2, cid,AttachHandle::cid121,2702
+	int id1, id2, cid, oid;AttachHandle::oid121,2702
+	bool init;AttachHandle::init122,2727
+	Vec3 offset;AttachHandle::offset123,2739
+	std::vector<Node*> get_nodes(AttachHandle::get_nodes125,2754
+	void backup(AttachHandle::backup128,2873
+	void resume(AttachHandle::resume129,2913
 
-io.cpp,410
+init.cpp,47
+void init_cuda(AttachHandle::init_cuda12,284
+
+io.cpp,442
 void get_valid_line 43,1566
 void triangle_to_obj 49,1711
-bool load_obj 91,3095
-bool load_objs 177,6438
-static double angle 184,6671
-vector<Face*> triangulate 190,6859
-void save_obj 219,7884
-void save_obj 276,10282
-void save_objs 334,12793
-void save_transformation 346,13245
-void save_screenshot 367,14058
-void flip_image 396,15070
-void save_png 403,15309
-void ensure_existing_directory 448,16981
+int load_obj_vertices(91,3095
+void load_obj(118,3602
+bool load_objs 224,6268
+static double angle 233,6515
+vector<Face*> triangulate 239,6703
+void save_obj 268,7728
+void save_obj 325,10126
+void save_objs 383,12637
+void save_transformation 395,13089
+void save_screenshot 416,13902
+void flip_image 445,14914
+void save_png 452,15153
+void ensure_existing_directory 497,16825
 
 io.hpp,23
 #define IO_HPP28,1313
@@ -676,24 +833,36 @@ static double dot 148,5061
 magic.cpp,21
 Magic magic;29,1320
 
-magic.hpp,688
+magic.hpp,1167
 #define MAGIC_HPP28,1316
-struct Magic 32,1369
-    bool fixed_high_res_mesh;Magic::fixed_high_res_mesh33,1384
-    double handle_stiffness,Magic::handle_stiffness34,1414
-    double handle_stiffness, collision_stiffness;Magic::collision_stiffness34,1414
-    double repulsion_thickness,Magic::repulsion_thickness35,1464
-    double repulsion_thickness, projection_thickness;Magic::projection_thickness35,1464
-    double edge_flip_threshold;Magic::edge_flip_threshold36,1518
-    double rib_stiffening;Magic::rib_stiffening37,1550
-    bool combine_tensors;Magic::combine_tensors38,1577
-    bool preserve_creases;Magic::preserve_creases39,1603
-    Magic Magic::Magic40,1630
+struct Magic 35,1403
+    bool fixed_high_res_mesh;Magic::fixed_high_res_mesh36,1418
+    double handle_stiffness,Magic::handle_stiffness37,1448
+    double handle_stiffness, collision_stiffness;Magic::collision_stiffness37,1448
+    double repulsion_thickness,Magic::repulsion_thickness38,1498
+    double repulsion_thickness, projection_thickness;Magic::projection_thickness38,1498
+    double edge_flip_threshold;Magic::edge_flip_threshold39,1552
+    double rib_stiffening;Magic::rib_stiffening40,1584
+    bool combine_tensors;Magic::combine_tensors41,1611
+    bool preserve_creases;Magic::preserve_creases42,1637
+    int tm_load_ob;Magic::tm_load_ob45,1691
+    bool tm_with_cd;Magic::tm_with_cd46,1711
+    bool tm_with_ti;Magic::tm_with_ti47,1732
+    bool tm_jacobi_preconditioner;Magic::tm_jacobi_preconditioner48,1753
+    bool tm_use_gpu;Magic::tm_use_gpu49,1788
+    bool tm_output_file;Magic::tm_output_file50,1809
+    int tm_iterations;Magic::tm_iterations51,1834
+    bool tm_self_cd;Magic::tm_self_cd52,1857
+    bool tm_strain_limiting;Magic::tm_strain_limiting53,1878
+    Magic Magic::Magic55,1908
 
-main.cpp,87
-int main 40,1608
-    struct Action 43,1692
-        string name;Action::name44,1712
+main.cpp,154
+void initModel(44,1720
+int stFrame 53,1906
+bool USE_GPU 54,1923
+int main 56,1945
+    struct Action 60,2074
+        string name;Action::name61,2094
 
 mesh.cpp,1550
 template <typename T1,34,1423
@@ -740,7 +909,7 @@ void update_x0 390,12636
 Mesh deep_copy 395,12763
 void delete_mesh 432,14183
 
-mesh.hpp,2443
+mesh.hpp,2637
 #define MESH_HPP28,1315
 struct Vert 44,1580
     int label;Vert::label45,1594
@@ -770,45 +939,51 @@ struct Node 63,2130
     double a,Node::a76,2665
     double a, m;Node::m76,2665
     Vec3 acceleration;Node::acceleration78,2719
-    Node Node::Node79,2742
-    explicit Node Node::Node80,2757
-    explicit Node Node::Node82,2908
-    explicit Node Node::Node84,3044
-struct Edge 88,3175
-    Node *n[Edge::n89,3189
-    int label;Edge::label90,3214
-    Face *adjf[Edge::adjf92,3253
-    int index;Edge::index93,3290
-    double theta;Edge::theta95,3388
-    double l;Edge::l97,3466
-    double theta_ideal,Edge::theta_ideal99,3513
-    double theta_ideal, damage;Edge::damage99,3513
-    double reference_angle;Edge::reference_angle100,3586
-    Edge Edge::Edge102,3680
-    explicit Edge Edge::Edge103,3695
-    explicit Edge Edge::Edge109,3928
-struct Face 116,4117
-    Vert* v[Face::v117,4131
-    int label;Face::label118,4156
-    Edge *adje[Face::adje120,4195
-    int index;Face::index121,4232
-    Vec3 n;Face::n123,4330
-    double a,Face::a125,4433
-    double a, m;Face::m125,4433
-    Mat2x2 Dm,Face::Dm126,4464
-    Mat2x2 Dm, invDm;Face::invDm126,4464
-    Mat2x2 S_plastic;Face::S_plastic128,4534
-    double damage;Face::damage129,4574
-    Face Face::Face131,4654
-    explicit Face Face::Face132,4669
-struct Mesh 140,4877
-    std::vector<Vert*> verts;Mesh::verts141,4891
-    std::vector<Node*> nodes;Mesh::nodes142,4921
-    std::vector<Edge*> edges;Mesh::edges143,4951
-    std::vector<Face*> faces;Mesh::faces144,4981
-inline Vec2 derivative 173,5938
-Mat<n,2> derivative 177,6083
-inline Mat2x3 derivative 180,6208
+    Vec3 f;Node::f79,2742
+    Node Node::Node80,2765
+    explicit Node Node::Node81,2780
+    explicit Node Node::Node83,2931
+    explicit Node Node::Node85,3067
+struct Edge 89,3198
+    Node *n[Edge::n90,3212
+    int label;Edge::label91,3237
+    Face *adjf[Edge::adjf93,3276
+    int index;Edge::index94,3313
+    double theta;Edge::theta96,3411
+    double l;Edge::l98,3489
+    double theta_ideal,Edge::theta_ideal100,3536
+    double theta_ideal, damage;Edge::damage100,3536
+    double reference_angle;Edge::reference_angle101,3609
+    Edge Edge::Edge103,3703
+    explicit Edge Edge::Edge104,3718
+    explicit Edge Edge::Edge110,3951
+struct Face 117,4140
+    Vert* v[Face::v118,4154
+    int label;Face::label119,4179
+    Edge *adje[Face::adje121,4218
+    int index;Face::index122,4255
+    Vec3 n;Face::n124,4353
+    double a,Face::a126,4456
+    double a, m;Face::m126,4456
+    Mat2x2 Dm,Face::Dm127,4487
+    Mat2x2 Dm, invDm;Face::invDm127,4487
+    Mat2x2 S_plastic;Face::S_plastic129,4557
+    double damage;Face::damage130,4597
+    Face Face::Face132,4677
+    explicit Face Face::Face133,4692
+struct Mesh 141,4900
+    std::vector<Vert*> verts;Mesh::verts142,4914
+    std::vector<Node*> nodes;Mesh::nodes143,4944
+    std::vector<Edge*> edges;Mesh::edges144,4974
+    std::vector<Face*> faces;Mesh::faces145,5004
+	Vec3 *_x,Mesh::_x157,5358
+	Vec3 *_x, *_x0;Mesh::_x0157,5358
+	Mesh(Mesh::Mesh159,5376
+	~Mesh(Mesh::~Mesh163,5409
+	Node *find_node(Mesh::find_node168,5472
+inline Vec2 derivative 194,6241
+Mat<n,2> derivative 198,6386
+inline Mat2x3 derivative 201,6511
 
 misc.cpp,76
 void tri2obj 34,1393
@@ -890,27 +1065,31 @@ void nonlinear_conjugate_gradients 40,1615
 static void add 58,2251
 static void nlcg_value_and_grad 63,2377
 
-obstacle.cpp,152
-Mesh& Obstacle::get_mesh(34,1401
-const Mesh& Obstacle::get_mesh(38,1461
-Mesh& Obstacle::get_mesh(42,1533
-void Obstacle::blend_with_previous 81,3049
+obstacle.cpp,284
+Mesh& Obstacle::get_mesh(36,1461
+const Mesh& Obstacle::get_mesh(40,1521
+Mesh& Obstacle::get_mesh(44,1593
+Mesh& Obstacle::get_mesh(65,2325
+void Obstacle::blend_with_previous 104,3841
+Obstacle::load_mesh(121,4423
+#define READ_FRAME_BY_FRAME123,4474
+Obstacle::load_mesh(276,7775
 
 obstacle.hpp,773
 #define OBSTACLE_HPP28,1319
-struct Obstacle 37,1560
-    double start_time,Obstacle::start_time39,1586
-    double start_time, end_time;Obstacle::end_time39,1586
-    bool activated;Obstacle::activated40,1619
-    std::string motion_obj_file;Obstacle::motion_obj_file48,1930
-    int motion_type,Obstacle::motion_type49,1963
-    int motion_type, slow;Obstacle::slow49,1963
-    const Motion *transform_spline;Obstacle::transform_spline54,2152
-    Mesh base_mesh;Obstacle::base_mesh57,2249
-    Mesh curr_state_mesh,Obstacle::curr_state_mesh59,2321
-    Mesh curr_state_mesh, last_frame_mesh,Obstacle::last_frame_mesh59,2321
-    Mesh curr_state_mesh, last_frame_mesh, next_frame_mesh;Obstacle::next_frame_mesh59,2321
-    Obstacle Obstacle::Obstacle61,2382
+struct Obstacle 38,1580
+    double start_time,Obstacle::start_time40,1606
+    double start_time, end_time;Obstacle::end_time40,1606
+    bool activated;Obstacle::activated41,1639
+    std::string motion_obj_file;Obstacle::motion_obj_file50,1985
+    int motion_type,Obstacle::motion_type51,2018
+    int motion_type, slow;Obstacle::slow51,2018
+    const Motion *transform_spline;Obstacle::transform_spline60,2324
+    Mesh base_mesh;Obstacle::base_mesh63,2421
+    Mesh curr_state_mesh,Obstacle::curr_state_mesh65,2493
+    Mesh curr_state_mesh, last_frame_mesh,Obstacle::last_frame_mesh65,2493
+    Mesh curr_state_mesh, last_frame_mesh, next_frame_mesh;Obstacle::next_frame_mesh65,2493
+    Obstacle Obstacle::Obstacle67,2554
 
 opengl.hpp,96
 #define OPENGL_HPP28,1317
@@ -1086,6 +1265,10 @@ double area 242,8892
 proximity.hpp,30
 #define PROXIMITY_HPP28,1320
 
+real.hpp,38
+#define REAL 6,54
+#define REAL 8,80
+
 refinemesh.cpp,54
 void refine_mesh(49,1650
 void refine_mesh(369,14237
@@ -1142,27 +1325,35 @@ struct RemeshOp 35,1445
     std::vector<Face*> added_faces, removed_faces;RemeshOp::removed_faces39,1616
     bool empty RemeshOp::empty40,1667
 
-runphysics.cpp,513
-#define BOOST_NO_CXX11_SCOPED_ENUMS35,1476
-#undef BOOST_NO_CXX11_SCOPED_ENUMS37,1544
-static string outprefix;44,1662
-static fstream timingfile;45,1687
-Simulation sim;47,1715
-Timer fps;48,1731
-void init_physics 54,1936
-static void save 86,3202
-static void save_obstacle_transforms 91,3437
-static void save_timings 104,4015
-void save 116,4433
-void sim_step(126,4871
-void offline_loop(161,6202
-void run_physics 166,6264
-void init_resume(210,7806
-void resume_physics 232,8788
-void copy_file 245,9235
+runphysics.cpp,539
+#define BOOST_NO_CXX11_SCOPED_ENUMS36,1496
+#undef BOOST_NO_CXX11_SCOPED_ENUMS38,1564
+string outprefix;45,1682
+static fstream timingfile;46,1700
+Simulation sim;48,1728
+Simulation *glSim;glSim49,1744
+Timer fps;50,1763
+void init_physics 57,1989
+static void save 89,3255
+static void save_obstacle_transforms 94,3490
+static void save_timings 107,4068
+void save 119,4486
+void sim_step(131,4973
+void offline_loop(171,6381
+void run_physics 176,6443
+void init_resume(220,7985
+void resume_physics 243,8994
+void copy_file 256,9441
 
 runphysics.hpp,31
 #define RUNPHYSICS_HPP28,1321
+
+save.cpp,141
+static void save_obstacle_transforms(11,193
+static void save(26,665
+void save(34,892
+static void save_gpu(42,1099
+void save_gpu(51,1328
 
 separate.cpp,1485
 static const int max_iter 39,1528
@@ -1257,7 +1448,7 @@ void separate_obstacles 391,13717
 separateobs.hpp,32
 #define SEPARATEOBS_HPP28,1322
 
-simulation.cpp,903
+simulation.cpp,904
 static const bool verbose 46,1705
 static const int proximity 47,1740
 void prepare 64,2489
@@ -1279,13 +1470,13 @@ void collision_step 335,12342
 void remeshing_step 350,12941
     typedef vector<Residual> MeshResidual;365,13537
 void update_velocities 423,15849
-void update_obstacles 433,16184
-template <typename Prim> int size 454,16994
-template <typename Prim> int get_index 464,17366
-template <typename Prim> Prim *get get480,17991
-vector<Vec3> node_positions 495,18480
+template <typename Prim> int size 435,16205
+template <typename Prim> int get_index 445,16577
+template <typename Prim> Prim *get get461,17202
+vector<Vec3> node_positions 476,17691
+void Simulation::reset(483,17891
 
-simulation.hpp,2539
+simulation.hpp,2589
 #define SIMULATION_HPP28,1321
 struct Wind 40,1539
     double density;Wind::density41,1553
@@ -1331,6 +1522,7 @@ struct Simulation 46,1613
     Timer timers[Simulation::timers69,2317
     std::vector<Mesh*> cloth_meshes,Simulation::cloth_meshes71,2367
     std::vector<Mesh*> cloth_meshes, obstacle_meshes;Simulation::obstacle_meshes71,2367
+    bool is_in_gpu;Simulation::is_in_gpu74,2436
 
 sparse.hpp,706
 #define SPARSE_HPP28,1317
@@ -1438,16 +1630,139 @@ Timer::Timer 33,1422
 void Timer::tick 37,1474
 void Timer::tock 41,1540
 
-timer.hpp,220
+timer.hpp,1141
 #define __TIMER_H29,1339
-struct Timer 36,1469
-    boost::posix_time::ptime then;Timer::then37,1484
-    double last,Timer::last38,1519
-    double last, total;Timer::total38,1519
-    void tick Timer::tick40,1557
+struct Timer 39,1509
+    boost::posix_time::ptime then;Timer::then40,1524
+    double last,Timer::last41,1559
+    double last, total;Timer::total41,1559
+    void tick Timer::tick43,1597
+# define	TIMING_BEGIN 47,1629
+# define	TIMING_END(48,1653
+# define	TIMING_BEGIN1 50,1685
+# define	TIMING_END1(53,1755
+    struct GPUTimer2 58,1905
+	cudaEvent_t start,GPUTimer2::start60,1937
+	cudaEvent_t start, stop;GPUTimer2::stop60,1937
+	float		accum;GPUTimer2::accum61,1963
+	GPUTimer2(GPUTimer2::GPUTimer264,1987
+	~GPUTimer2(GPUTimer2::~GPUTimer268,2068
+	void tick(GPUTimer2::tick74,2158
+	void tock(GPUTimer2::tock79,2258
+	float tock(GPUTimer2::tock85,2390
+	float tock2(GPUTimer2::tock295,2626
+	void printTime(GPUTimer2::printTime104,2830
+	void reset(GPUTimer2::reset110,3020
+	void reset(GPUTimer2::reset113,3052
+	void tick(GPUTimer2::tick118,3151
+	void tock(GPUTimer2::tock120,3169
+	float tock(GPUTimer2::tock122,3187
+	float tock2(GPUTimer2::tock2125,3233
+	void printTime(GPUTimer2::printTime128,3265
+	void reset(GPUTimer2::reset130,3319
+	void reset(GPUTimer2::reset132,3338
 
-transformation.cpp,1078
-Transformation identity 31,1351
+tmbvh.cpp,977
+static vector<Mesh *>  *ptCloth;ptCloth22,302
+void self_mesh(24,338
+class aap 30,409
+	char _xyz;aap::_xyz32,431
+	float _p;aap::_p33,444
+	FORCEINLINE aap(aap::aap35,458
+	FORCEINLINE bool inside(aap::inside50,792
+bvh::bvh(55,878
+static vec3f *s_fcenters;s_fcenters114,1951
+static BOX *s_fboxes;s_fboxes115,1978
+static unsigned int *s_idx_buffer;s_idx_buffer116,2001
+static bvh_node *s_current;s_current117,2037
+static vec3i *s_nidx;s_nidx118,2066
+void bvh::construct(120,2091
+void bvh::construct(193,3526
+void bvh::resetParents(284,5491
+void bvh::refit(289,5557
+void bvh::reorder(297,5660
+void bvh::push2GPU(356,7014
+bvh_node::construct(435,8912
+bvh_node::construct(442,9002
+REAL *__getVtx(__getVtx487,9913
+contour::visualize(499,10108
+bvh_node::visualizeBound(524,10515
+bvh_node::visualize(530,10592
+bvh_node::refit(548,10893
+bvh_node::resetParents(572,11265
+front_list::push2GPU(591,11589
+void mesh_id(619,12137
+bool covertex(636,12439
+
+tmbvh.hpp,2674
+typedef Vec3 vec3f;10,117
+typedef Vec<3, int> vec3i;11,138
+vmin(14,186
+vmax(23,321
+class aabb 32,440
+	FORCEINLINE void init(aabb::init33,454
+	vec3f _min;aabb::_min39,588
+	vec3f _max;aabb::_max40,602
+	FORCEINLINE aabb(aabb::aabb42,618
+	FORCEINLINE aabb(aabb::aabb46,658
+	FORCEINLINE aabb(aabb::aabb50,721
+	FORCEINLINE bool overlaps(aabb::overlaps57,842
+	FORCEINLINE bool overlaps(aabb::overlaps70,1173
+	FORCEINLINE bool inside(aabb::inside88,1531
+	FORCEINLINE aabb &operator += aabb::operator +=97,1772
+	FORCEINLINE aabb &operator += aabb::operator +=104,1884
+	FORCEINLINE aabb operator + aabb::operator +111,2005
+	FORCEINLINE REAL width(aabb::width114,2098
+	FORCEINLINE REAL height(aabb::height115,2162
+	FORCEINLINE REAL depth(aabb::depth116,2226
+	FORCEINLINE vec3f center(aabb::center117,2290
+	FORCEINLINE REAL volume(aabb::volume118,2359
+	FORCEINLINE bool empty(aabb::empty121,2434
+	FORCEINLINE void enlarge(aabb::enlarge125,2504
+	vec3f getMax(aabb::getMax130,2657
+	vec3f getMin(aabb::getMin131,2691
+	void print(aabb::print133,2727
+#define MAX(140,2884
+#define MIN(141,2926
+#define BOX 142,2968
+class front_node 148,3038
+	bvh_node *_left,front_node::_left150,3067
+	bvh_node *_left, *_right;front_node::_right150,3067
+	unsigned int _flag;front_node::_flag151,3095
+	unsigned int _ptr;front_node::_ptr152,3134
+	FORCEINLINE front_node(front_node::front_node154,3182
+	void update front_node::update160,3313
+class front_list 196,4021
+class bvh_node 202,4158
+	BOX _box;bvh_node::_box203,4176
+	int _child;bvh_node::_child204,4188
+	int _parent;bvh_node::_parent205,4243
+	contour _bound;bvh_node::_bound206,4258
+	void setParent(bvh_node::setParent208,4278
+	int get_bound_length(bvh_node::get_bound_length211,4330
+	int get_bound_idx(bvh_node::get_bound_idx218,4465
+	bvh_node(bvh_node::bvh_node223,4550
+	~bvh_node(bvh_node::~bvh_node228,4602
+	void collide(bvh_node::collide232,4633
+	void self_collide(bvh_node::self_collide255,5206
+	FORCEINLINE BOX &box(bvh_node::box275,5778
+	FORCEINLINE bvh_node *left(bvh_node::left276,5820
+	FORCEINLINE bvh_node *right(bvh_node::right277,5877
+	FORCEINLINE int triID(bvh_node::triID278,5939
+	FORCEINLINE int isLeaf(bvh_node::isLeaf279,5984
+	FORCEINLINE int parentID(bvh_node::parentID280,6035
+	FORCEINLINE void getLevel(bvh_node::getLevel282,6086
+	FORCEINLINE void getLevelIdx(bvh_node::getLevelIdx291,6318
+class bvh 304,6558
+	int _num;bvh::_num305,6571
+	bvh_node *_nodes;bvh::_nodes306,6599
+	~bvh(bvh::~bvh317,6896
+	bvh_node *root(bvh::root322,6951
+	void collide(bvh::collide326,7016
+	void self_collide(bvh::self_collide336,7183
+
+transformation.cpp,1092
+Transformation identity bvh::identity31,1351
 Transformation inverse(35,1412
 Quaternion inverse(48,1716
 Quaternion Quaternion::from_axisangle(56,1879
@@ -1754,3 +2069,9 @@ template <class T> inline bool isfinite(50,2063
 template <class T> inline bool   finite(51,2162
 inline double sqrt(53,2262
 template <class T> inline T log2(55,2317
+
+save.hpp,0
+
+gpu.hpp,0
+
+eigen.hpp,0

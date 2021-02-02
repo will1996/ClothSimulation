@@ -29,6 +29,7 @@
 
 #include "sparse.hpp"
 #include "util.hpp"
+#include "real.hpp"
 
 typedef Vec<4> Vec4;
 

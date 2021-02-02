@@ -53,7 +53,30 @@ vector<Constraint*> NodeHandle::get_constraints (double t) {
     add_position_constraints(node, x, s*::magic.handle_stiffness, cons);
     return cons;
 }
+#include "simulation.hpp"
 
+extern Simulation *glSim;
+
+vector<Constraint*> AttachHandle::get_constraints(double t) {
+	REAL s = strength(t);
+	if (!s)
+		return vector<Constraint*>();
+
+	Node *no = glSim->obstacle_meshes[oid]->nodes[id2];
+	Node *nc = glSim->cloth_meshes[cid]->nodes[id1];
+
+	if (!init) {
+		offset = nc->x0 - no->x0;
+		init = true;
+	}
+
+	Vec3 now = no->x0 + no->v * glSim->step_time;
+	now += offset;
+
+	vector<Constraint*> cons;
+	add_position_constraints(nc, now, s*::magic.handle_stiffness, cons);
+	return cons;
+}
 vector<Constraint*> CircleHandle::get_constraints (double t) {
     double s = strength(t);
     if (!s)
@@ -64,7 +87,7 @@ vector<Constraint*> CircleHandle::get_constraints (double t) {
         if (node->label != label)
             continue;
         double theta = 2*M_PI*dot(node->verts[0]->u, u)/c;
-        Vec3 x = xc + (dx0*cos(theta) + dx1*sin(theta))*c/(2*M_PI);
+        Vec3 x = xc + (dx0*cos(theta) + dx1*sin(theta))*double(c)/(2*M_PI);
         if (motion)
             x = motion->pos(t).apply(x);
         double l = 0;

@@ -76,6 +76,7 @@ struct Node {
     double a, m; // area, mass
     // pop filter data
     Vec3 acceleration;
+    Vec3 f; //friction
     Node () {}
     explicit Node (const Vec3 &y, const Vec3 &x, const Vec3 &v, int label=0):
         label(label), y(y), x(x), x0(x), v(v) ,dv(Vec3(0)),dx(Vec3(0)){}
@@ -151,6 +152,26 @@ struct Mesh {
     void remove (Node *node);
     void remove (Edge *edge);
     void remove (Face *face);
+
+    // temporary used buffer
+	Vec3 *_x, *_x0;
+
+	Mesh() {
+		_x = _x0 = NULL;
+	}
+
+	~Mesh() {
+		if (_x) delete[] _x;
+		if (_x0) delete[] _x0;
+	}
+
+	Node *find_node(int id) {
+		for (int i = 0; i<nodes.size(); i++)
+			if (nodes[i]->index == id)
+				return nodes[i];
+
+		return NULL;
+	}
 };
 
 template <typename Prim> const std::vector<Prim*> &get (const Mesh &mesh);

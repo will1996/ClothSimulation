@@ -27,6 +27,7 @@
 #ifndef OBSTACLE_HPP
 #define OBSTACLE_HPP
 
+#include "real.hpp"
 #include "mesh.hpp"
 #include "spline.hpp"
 #include "util.hpp"
@@ -40,6 +41,7 @@ public:
     bool activated;
     // Gets the last-returned mesh or its transformation
     Mesh& get_mesh();
+    Mesh& get_mesh(REAL time_sec);
     const Mesh& get_mesh() const;
 
     // Gets the state of the mesh at a given time, and updates the internal
@@ -50,6 +52,10 @@ public:
 
     // lerp with previous mesh at time t - dt
     void blend_with_previous (double t, double dt, double blend);
+
+    	// loading external mesh vertices
+    void load_mesh(REAL t, REAL dt, REAL blend);
+    void load_mesh(Vec3 *);
 
     const Motion *transform_spline;
 

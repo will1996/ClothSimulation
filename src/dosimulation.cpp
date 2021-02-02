@@ -33,10 +33,12 @@ void copy_file (const string &input, const string &output);
 extern void parse_handles (vector<Handle*>&, const Json::Value&,
                      const vector<Cloth>&, const vector<Motion>&);
 extern void parse_obstacles (vector<Obstacle>&, const Json::Value&,
-                      const vector<Motion>&, bool finer = false);
+                      const vector<Motion>&);
+extern void advance_step_gpu (Simulation &sim);
 void update_obstacles (Simulation &sim, bool update_positions=true);
 void refine_mesh(Simulation &sim);
 
+extern bool USE_GPU;
 
 void checkDx(Simulation &sim, const char *s)
 {
@@ -105,7 +107,7 @@ void initialize(Simulation &sim, int start_step, int end_step, int cur_level, in
         if (rest_level == 0)
         {
             sim.obstacles.clear();
-            parse_obstacles(sim.obstacles, json["obstacles"], sim.motions, true);
+            parse_obstacles(sim.obstacles, json["obstacles"], sim.motions);
         }
     }
     prepare(sim); // re-prepare the new cloth meshes
@@ -173,7 +175,12 @@ if (static_rest_step > sim.step) static_rest_step = sim.step;
             //save_objs(sim.cloth_meshes, stringf("%s/tmp%d_%04d_%03dafter", outprefix.c_str(), 2, sim.frame, i));
             //cout << "back_step"<<i<<" success!" << myrank << endl;
             sim.add_pos = true;
-            advance_step(sim, 0, alpha, 1);
+            if (USE_GPU){
+                advance_step_gpu(sim);
+            }
+            else {
+                advance_step(sim, 0, alpha, 1);
+            }
             sim.add_pos = false;
             //cout << "advance_step"<<i<<" success!" << myrank << endl;
         }

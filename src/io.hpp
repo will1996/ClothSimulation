@@ -31,8 +31,9 @@
 
 void triangle_to_obj (const std::string &infile, const std::string &outfile);
 
-bool load_obj (Mesh &mesh, const std::string &filename);
+void load_obj (Mesh &mesh, const std::string &filename);
 bool load_objs (std::vector<Mesh*> &meshes, const std::string &prefix);
+int load_obj_vertices(const std::string &filename, std::vector<Vec3> &verts);
 
 void save_obj (const Mesh &mesh, const std::string &filename, bool dxs = false);
 void save_objs (const std::vector<Mesh*> &meshes, const std::string &prefix, bool dxs = false);

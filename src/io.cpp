@@ -88,96 +88,145 @@ void triangle_to_obj (const string &inname, const string &outname) {
 
 vector<Face*> triangulate (const vector<Vert*> &verts);
 
-bool load_obj (Mesh &mesh, const string &filename) {
-    fstream file(filename.c_str(), ios::in);
-    if(!file) {
-        cout << "Error: failed to open file " << filename << endl;
-        return false;
-    }
-    delete_mesh(mesh);
-    while (file) {
-        string line;
-        get_valid_line(file, line);
-        stringstream linestream(line);
-        string keyword;
-        linestream >> keyword;
-        if (keyword == "vt") {
-            Vec2 u;
-            linestream >> u[0] >> u[1];
-            mesh.add(new Vert(u));
-        } else if (keyword == "vl") {
-            linestream >> mesh.verts.back()->label;
-        } else if (keyword == "v") {
-            Vec3 x;
-            linestream >> x[0] >> x[1] >> x[2];
-            mesh.add(new Node(x, Vec3(0)));
-        } else if (keyword == "ny") {
-            Vec3 &y = mesh.nodes.back()->y;
-            linestream >> y[0] >> y[1] >> y[2];
-        } else if (keyword == "nv") {
-            Vec3 &v = mesh.nodes.back()->v;
-            linestream >> v[0] >> v[1] >> v[2];
-        } else if (keyword == "ndv") {
-            Vec3 &dv = mesh.nodes.back()->dv;
-            linestream >> dv[0] >> dv[1] >> dv[2];
-        } else if (keyword == "ndx") {
-            Vec3 &dx = mesh.nodes.back()->dx;
-            linestream >> dx[0] >> dx[1] >> dx[2];
-        } else if (keyword == "nl") {
-            linestream >> mesh.nodes.back()->label;
-        } else if (keyword == "e") {
-            int n0, n1;
-            linestream >> n0 >> n1;
-            mesh.add(new Edge(mesh.nodes[n0-1], mesh.nodes[n1-1]));
-        } else if (keyword == "ea") {
-            linestream >> mesh.edges.back()->theta_ideal;
-        } else if (keyword == "ed") {
-            linestream >> mesh.edges.back()->damage;
-        } else if (keyword == "el") {
-            linestream >> mesh.edges.back()->label;
-        } else if (keyword == "f") {
-            vector<Vert*> verts;
-            vector<Node*> nodes;
-            string w;
-            while (linestream >> w) {
-                stringstream wstream(w);
-                int v, n;
-                char c;
-                wstream >> n >> c >> v;
-                nodes.push_back(mesh.nodes[n-1]);
-                if (wstream)
-                    verts.push_back(mesh.verts[v-1]);
-                else if (!nodes.back()->verts.empty())
-                    verts.push_back(nodes.back()->verts[0]);
-                else {
-                    verts.push_back(new Vert(project<2>(nodes.back()->x),
-                                             nodes.back()->label));
-                    mesh.add(verts.back());
-                }
-            }
-            for (int v = 0; v < verts.size(); v++)
-                connect(verts[v], nodes[v]);
-            vector<Face*> faces = triangulate(verts);
-            for (int f = 0; f < faces.size(); f++)
-                mesh.add(faces[f]);
-        } else if (keyword == "tl" || keyword == "fl") {
-            linestream >> mesh.faces.back()->label;
-        } else if (keyword == "ts" || keyword == "fs") {
-            Mat2x2 &S = mesh.faces.back()->S_plastic;
-            linestream >> S(0,0) >> S(0,1) >> S(1,0) >> S(1,1);
-        } else if (keyword == "td" || keyword == "fd") {
-            linestream >> mesh.faces.back()->damage;
-        }
-    }
-    mark_nodes_to_preserve(mesh);
-    compute_ms_data(mesh);
-    return true;
+int load_obj_vertices(const string &filename, vector<Vec3> &verts)
+{
+	fstream file(filename.c_str(), ios::in);
+	if (!file) {
+		return 0;
+	}
+
+	int count = 0;
+	while (file) {
+		string line;
+		get_valid_line(file, line);
+		stringstream linestream(line);
+		string keyword;
+		linestream >> keyword;
+		
+		if (keyword == "v") {
+			//occationally, double output -> float input error!
+			double xx, yy, zz;
+			linestream >> xx >> yy >> zz;
+			verts.push_back(Vec3(xx, yy, zz));
+			count++;
+		}
+	}
+
+	return count;
+}
+
+void load_obj(Mesh &mesh, const string &filename)
+{
+	fstream file(filename.c_str(), ios::in);
+	if (!file) {
+		cout << "Error: failed to open file " << filename << endl;
+		return;
+	}
+	else
+		delete_mesh(mesh);
+
+	while (file) {
+		string line;
+		get_valid_line(file, line);
+		stringstream linestream(line);
+		string keyword;
+		linestream >> keyword;
+		if (keyword == "vt") {
+			Vec2 u;
+			linestream >> u[0] >> u[1];
+
+			//#define ADJUST_VT
+#ifdef ADJUST_VT
+			u *= 200.0;
+#endif
+
+			mesh.add(new Vert(u));
+		}
+		else if (keyword == "vl") {
+			linestream >> mesh.verts.back()->label;
+		}
+		else if (keyword == "v") {
+			//occationally, double output -> float input error!
+			double xx, yy, zz;
+			linestream >> xx >> yy >> zz;
+			mesh.add(new Node(Vec3(xx, yy, zz), Vec3(0)));
+
+/*			Vec3 x;
+			linestream >> x[0] >> x[1] >> x[2];
+			mesh.add(new Node(x, Vec3(0)));*/
+		}
+		else if (keyword == "ny") {
+			Vec3 &y = mesh.nodes.back()->y;
+			linestream >> y[0] >> y[1] >> y[2];
+		}
+		else if (keyword == "nv") {
+			Vec3 &v = mesh.nodes.back()->v;
+			linestream >> v[0] >> v[1] >> v[2];
+		}
+		else if (keyword == "nl") {
+			linestream >> mesh.nodes.back()->label;
+		}
+		else if (keyword == "e") {
+			int n0, n1;
+			linestream >> n0 >> n1;
+			mesh.add(new Edge(mesh.nodes[n0 - 1], mesh.nodes[n1 - 1]));
+		}
+		else if (keyword == "ea") {
+			linestream >> mesh.edges.back()->theta_ideal;
+		}
+		else if (keyword == "ed") {
+			linestream >> mesh.edges.back()->damage;
+		}
+		else if (keyword == "el") {
+			linestream >> mesh.edges.back()->label;
+		}
+		else if (keyword == "f") {
+			vector<Vert*> verts;
+			vector<Node*> nodes;
+			string w;
+			while (linestream >> w) {
+				stringstream wstream(w);
+				int v, n;
+				char c;
+				wstream >> n >> c >> v;
+				nodes.push_back(mesh.nodes[n - 1]);
+				if (wstream)
+					verts.push_back(mesh.verts[v - 1]);
+				else if (!nodes.back()->verts.empty())
+					verts.push_back(nodes.back()->verts[0]);
+				else {
+					verts.push_back(new Vert(project<2>(nodes.back()->x),
+						nodes.back()->label));
+					mesh.add(verts.back());
+				}
+			}
+			for (int v = 0; v < verts.size(); v++)
+				connect(verts[v], nodes[v]);
+			vector<Face*> faces = triangulate(verts);
+			for (int f = 0; f < faces.size(); f++)
+				mesh.add(faces[f]);
+		}
+		else if (keyword == "tl" || keyword == "fl") {
+			linestream >> mesh.faces.back()->label;
+		}
+		else if (keyword == "ts" || keyword == "fs") {
+			Mat2x2 &S = mesh.faces.back()->S_plastic;
+			linestream >> S(0, 0) >> S(0, 1) >> S(1, 0) >> S(1, 1);
+		}
+		else if (keyword == "td" || keyword == "fd") {
+			linestream >> mesh.faces.back()->damage;
+		}
+	}
+	mark_nodes_to_preserve(mesh);
+	compute_ms_data(mesh);
 }
 
 bool load_objs (vector<Mesh*> &meshes, const string &prefix) {
     bool ans = true;
-    for (int m = 0; m < meshes.size(); m++)
-        ans = ans && load_obj(*meshes[m], stringf("%s_%02d.obj", prefix.c_str(), m));
+    for (int m = 0; m < meshes.size(); m++) {
+        ans = ans;
+        load_obj(*meshes[m], stringf("%s_%02d.obj", prefix.c_str(), m));
+    }
     return ans;
 }
 
